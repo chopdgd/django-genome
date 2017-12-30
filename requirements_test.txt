@@ -1,8 +1,16 @@
-coverage==4.4.1
-mock>=1.0.1
-flake8>=2.1.0
-tox>=1.7.0
-codecov>=2.0.0
+coverage==4.4.2
+mock==2.0.0
+flake8==3.5.0
+tox==2.9.1
+codecov==2.0.10
 
 
 # Additional test requirements go here
+
+pytest==3.3.1
+pytest-cov==2.5.1
+pytest-django==3.1.2
+pytest-sugar==0.9.0
+django-coverage-plugin==1.5.0
+django-test-plus==1.0.21
+model-mommy==1.5.0

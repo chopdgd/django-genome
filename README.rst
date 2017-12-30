@@ -5,11 +5,19 @@ Django Genome
 .. image:: https://badge.fury.io/py/django-genome.svg
     :target: https://badge.fury.io/py/django-genome
 
-.. image:: https://travis-ci.org/genomics-geek/django-genome.svg?branch=master
-    :target: https://travis-ci.org/genomics-geek/django-genome
+.. image:: https://travis-ci.org/chopdgd/django-genome.svg?branch=develop
+    :target: https://travis-ci.org/chopdgd/django-genome
 
-.. image:: https://codecov.io/gh/genomics-geek/django-genome/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/genomics-geek/django-genome
+.. image:: https://codecov.io/gh/chopdgd/django-genome/branch/develop/graph/badge.svg
+    :target: https://codecov.io/gh/chopdgd/django-genome
+
+.. image:: https://pyup.io/repos/github/chopdgd/django-genome/shield.svg
+    :target: https://pyup.io/repos/github/chopdgd/django-genome/
+    :alt: Updates
+
+.. image:: https://pyup.io/repos/github/chopdgd/django-genome/python-3-shield.svg
+    :target: https://pyup.io/repos/github/chopdgd/django-genome/
+    :alt: Python 3
 
 Django app for syncing and storing human genome reference data
 
@@ -31,7 +39,7 @@ Add it to your `INSTALLED_APPS`:
 
     INSTALLED_APPS = (
         ...
-        'genome.apps.GenomeConfig',
+        'genome',
         ...
     )
 
@@ -44,7 +52,7 @@ Add Django Genome's URL patterns:
 
     urlpatterns = [
         ...
-        url(r'^', include(genome_urls)),
+        url(r'^', include(genome_urls, namespace='genome')),
         ...
     ]
 
