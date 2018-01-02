@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+test django-genome
+------------
+Tests for `django-genome` utils module.
+"""
+
+import pytest
+
+from genome import app_settings, utils
+
+
+@pytest.mark.parametrize('chromosome, expected', [
+    ('chr1', '1'),
+    ('1', '1'),
+    ('1p10.1', '1'),
+    ('1q10.1', '1'),
+    ('dasfa', None),
+])
+def test_reformat_chromosome(chromosome, expected):
+    assert utils.reformat_chromosome(chromosome) == expected

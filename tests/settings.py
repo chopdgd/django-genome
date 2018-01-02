@@ -32,6 +32,9 @@ INSTALLED_APPS = [
     "django.contrib.admin",
 
     "genome",
+
+    "rest_framework",
+    "django_filters",
 ]
 
 SITE_ID = 1
@@ -94,4 +97,43 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 100,
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'log_to_stdout': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            },
+        },
+    'loggers': {
+        'genome.management.commands.chromosome_sync': {
+            'handlers': ['log_to_stdout'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'genome.management.commands.gene_sync': {
+            'handlers': ['log_to_stdout'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'genome.management.commands.transcript_sync': {
+            'handlers': ['log_to_stdout'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'genome.management.commands.genome_sync': {
+            'handlers': ['log_to_stdout'],
+            'level': 'DEBUG',
+            'propagate': True,
+        }
+    }
 }
