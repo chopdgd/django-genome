@@ -78,7 +78,7 @@ class TestGeneAPI(APITestCase):
             'created',
             'modified'
         ]
-        difference = set(expected_keys).difference(set(observed_keys))
+        difference = set(observed_keys).difference(set(expected_keys))
         assert len(difference) == 0
 
     def test_put(self):
@@ -176,7 +176,7 @@ class TestTranscriptAPI(APITestCase):
             'created',
             'modified'
         ]
-        difference = set(expected_keys).difference(set(observed_keys))
+        difference = set(observed_keys).difference(set(expected_keys))
         assert len(difference) == 0
 
     def test_put(self):
@@ -270,7 +270,7 @@ class TestExonAPI(APITestCase):
             'created',
             'modified'
         ]
-        difference = set(expected_keys).difference(set(observed_keys))
+        difference = set(observed_keys).difference(set(expected_keys))
         assert len(difference) == 0
 
     def test_put(self):
