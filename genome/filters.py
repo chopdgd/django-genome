@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 from django import forms
-from django.db.models import Q
+from django.db.models import CharField, TextField
 
 import django_filters
+from genomix.filters import DisplayChoiceFilter
 
-from . import models
+from . import choices, models
 
 
 class GeneFilter(django_filters.rest_framework.FilterSet):
+
+    status = DisplayChoiceFilter(choices=choices.HGNC_GENE_STATUS)
 
     class Meta:
         model = models.Gene
@@ -19,6 +22,20 @@ class GeneFilter(django_filters.rest_framework.FilterSet):
             'active',
             'chromosome',
         ]
+        filter_overrides = {
+            CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'iexact',
+                },
+            },
+            TextField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'icontains',
+                },
+            }
+        }
 
 
 class TranscriptFilter(django_filters.rest_framework.FilterSet):
@@ -27,12 +44,7 @@ class TranscriptFilter(django_filters.rest_framework.FilterSet):
         queryset=models.Gene.objects.all(),
         widget=forms.NumberInput,
     )
-
-    gene_symbol = django_filters.CharFilter(
-        name='gene__symbol',
-        label='Gene Symbol',
-        method='filter_gene_symbol',
-    )
+    strand = DisplayChoiceFilter(choices=choices.STRAND_TYPES)
 
     class Meta:
         model = models.Transcript
@@ -40,18 +52,21 @@ class TranscriptFilter(django_filters.rest_framework.FilterSet):
             'label',
             'active',
             'gene',
+            'gene__symbol',
             'strand',
             'transcription_start',
             'transcription_end',
             'cds_start',
             'cds_end',
         ]
-
-    def filter_gene_symbol(self, queryset, name, value):
-        return queryset.filter(
-            Q(gene__symbol__icontains=value) |
-            Q(gene__synonyms__label__icontains=value)
-        )
+        filter_overrides = {
+            CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'iexact',
+                },
+            }
+        }
 
 
 class ExonFilter(django_filters.rest_framework.FilterSet):
@@ -61,19 +76,22 @@ class ExonFilter(django_filters.rest_framework.FilterSet):
         widget=forms.NumberInput,
     )
 
-    transcript_label = django_filters.CharFilter(
-        name='transcript__label',
-        label='Transcript Label',
-        lookup_expr='iexact',
-    )
-
     class Meta:
         model = models.Exon
         fields = [
             'number',
             'active',
             'transcript',
+            'transcript__label',
             'start',
             'end',
             'cds',
         ]
+        filter_overrides = {
+            CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'iexact',
+                },
+            }
+        }
