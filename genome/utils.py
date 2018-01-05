@@ -7,5 +7,5 @@ def reformat_chromosome(chromosome):
     else:
         new_chrom = chromosome.replace('chr', '').lower()
 
-    if new_chrom in list(map(str, range(1, 23))) or new_chrom in ['X', 'Y', 'M', 'MT']:
+    if new_chrom in list(map(str, range(1, 23))) or new_chrom in ['x', 'y', 'm', 'mt']:
         return new_chrom
