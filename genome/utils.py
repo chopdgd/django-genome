@@ -5,7 +5,7 @@ def reformat_chromosome(chromosome):
     elif 'q' in chromosome:
         new_chrom = chromosome.split('q')[0].lower()
     else:
-        new_chrom = chromosome.replace('chr', '').lower()
+        new_chrom = chromosome.replace('chr', '')
 
     if new_chrom in list(map(str, range(1, 23))) or new_chrom in ['X', 'Y', 'M', 'MT']:
         return new_chrom
