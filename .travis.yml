@@ -12,6 +12,7 @@ env:
   - TOX_ENV=py35-django-111
   - TOX_ENV=py34-django-111
   - TOX_ENV=py27-django-111
+  - TOX_ENV=flake8
 
 matrix:
   fast_finish: true

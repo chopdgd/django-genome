@@ -66,7 +66,7 @@ setup(
     zip_safe=False,
     keywords='django-genome',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Framework :: Django',
         'Framework :: Django :: 1.10',
         'Framework :: Django :: 1.11',
