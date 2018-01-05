@@ -92,7 +92,6 @@ class Command(BaseCommand):
                     'not_curated_rat_genome_database': not_curated_rat_genome_database,
                 }
             )
-            logger.info(created)
 
             # Create GeneSynonym
             synonyms = hgnc_gene_data[
@@ -126,4 +125,3 @@ class Command(BaseCommand):
                     'status': getattr(choices.HGNC_GENE_STATUS, 'ucsc_gene')
                 }
             )
-            logger.info(created)

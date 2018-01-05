@@ -56,10 +56,15 @@ Add Django Genome's URL patterns:
         ...
     ]
 
+Initial sync for genome models::
+
+    python manage.py genome_sync
+
 Features
 --------
 
-* TODO
+* Includes models for Genome, Chromosome, CytoBand, Gene, Transcript, and Exons
+* Syncs data for hg18, hg19, hg38 from HGNC and UCSC
 
 Running Tests
 -------------

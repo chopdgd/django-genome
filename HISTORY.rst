@@ -7,3 +7,11 @@ History
 ++++++++++++++++++
 
 * First release on PyPI.
+* Initial models and REST API
+* Syncs data from HGNC and UCSC to build database
+
+0.2.0 (2018-01-5)
+++++++++++++++++++
+
+* Improved REST API Filters
+* made Chromosomes and Gene Symbols save as uppercase to maintain consistency
