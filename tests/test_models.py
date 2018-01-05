@@ -36,10 +36,10 @@ class TestGenome(object):
 class TestChromosome(object):
 
     def test_str(self, Chromosome):
-        assert str(Chromosome) == 'label'
+        assert str(Chromosome) == 'LABEL'
 
     def test_attributes(self, Chromosome):
-        assert Chromosome.label == 'label'
+        assert Chromosome.label == 'LABEL'
         assert Chromosome.genome.id == 1
         assert Chromosome.length == 1
         assert Chromosome.active is True
@@ -60,7 +60,7 @@ class TestCytoBand(object):
         assert CytoBand.active is True
 
     def test_locus(self, CytoBand):
-        assert CytoBand.locus == 'chrlabel:1-1'
+        assert CytoBand.locus == 'chrLABEL:1-1'
 
 
 @pytest.mark.django_db
