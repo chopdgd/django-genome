@@ -27,7 +27,7 @@ class Chromosome(TimeStampedModel):
     Source: hg19 http://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.chrom.sizes
     Source: hg38 http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes
     """
-    label = models.CharField(max_length=50)
+    label = models.CharField(max_length=2)
     genome = models.ForeignKey(
         'genome.Genome',
         related_name='chromosomes',
@@ -44,6 +44,10 @@ class Chromosome(TimeStampedModel):
     def __str__(self):
         return self.label
 
+    def save(self, **kwargs):
+        self.label = self.label.upper()
+        super(Chromosome, self).save(**kwargs)
+
 
 class CytoBand(TimeStampedModel):
     """Cytogenetic Band.
@@ -52,7 +56,7 @@ class CytoBand(TimeStampedModel):
     Source: hg19 http://hgdownload.soe.ucsc.edu/goldenPath/hg19/database/cytoBand.txt.gz
     Source: hg38 http://hgdownload.soe.ucsc.edu/goldenPath/hg38/database/cytoBand.txt.gz
     """
-    label = models.CharField(max_length=50)
+    label = models.CharField(max_length=20)
     chromosome = models.ForeignKey(
         'genome.Chromosome',
         related_name='cytobands',

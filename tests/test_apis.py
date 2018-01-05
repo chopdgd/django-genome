@@ -60,7 +60,7 @@ class TestGeneAPI(APITestCase):
         assert response_json[0]['symbol'] == 'symbol'
         assert response_json[0]['name'] == 'name'
         assert response_json[0]['status'] == 'approved'
-        assert response_json[0]['chromosome'] == 'label'
+        assert response_json[0]['chromosome'] == 'LABEL'
         assert response_json[0]['synonyms'] == ['label']
         assert response_json[0]['active'] is True
 
