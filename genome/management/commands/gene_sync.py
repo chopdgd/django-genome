@@ -42,7 +42,7 @@ class Command(BaseCommand):
         for line in hgnc_data:
             hgnc_gene_data = line.split('\t')
 
-            symbol = hgnc_gene_data[hgnc_header.index('Approved Symbol')].upper()
+            symbol = hgnc_gene_data[hgnc_header.index('Approved Symbol')]
             name = hgnc_gene_data[hgnc_header.index('Approved Name')]
             hgnc_id = hgnc_gene_data[hgnc_header.index('HGNC ID')]
             status = hgnc_gene_data[hgnc_header.index('Status')]
@@ -71,9 +71,8 @@ class Command(BaseCommand):
                 )
             except ObjectDoesNotExist:
                 chromosome_obj = None
-
             gene_obj, created = models.Gene.objects.get_or_create(
-                symbol=symbol,
+                symbol=symbol.upper(),
                 chromosome=chromosome_obj,
                 defaults={
                     'name': name,
@@ -93,6 +92,7 @@ class Command(BaseCommand):
                     'not_curated_rat_genome_database': not_curated_rat_genome_database,
                 }
             )
+            logger.info(created)
 
             # Create GeneSynonym
             synonyms = hgnc_gene_data[
@@ -103,7 +103,7 @@ class Command(BaseCommand):
             ].strip().split(',')
 
             for synonym in synonyms + previous_symbols:
-                label = synonym.strip().upper()
+                label = synonym.strip()
                 if label:
                     synonym_obj, created = models.GeneSynonym.objects.get_or_create(label=label)
                     gene_obj.synonyms.add(synonym_obj)
@@ -114,15 +114,16 @@ class Command(BaseCommand):
         logger.info('Creating Genes from kgXref...')
         for line in kgXref_data:
             line = line.strip().split('\t')
-            symbol = line[4].upper()
+            symbol = line[4]
             refseq = line[5]
             name = line[7]
 
             gene_obj, created = models.Gene.objects.get_or_create(
-                symbol=symbol,
+                symbol=symbol.upper(),
                 defaults={
                     'refseq': refseq,
                     'name': name,
                     'status': getattr(choices.HGNC_GENE_STATUS, 'ucsc_gene')
                 }
             )
+            logger.info(created)

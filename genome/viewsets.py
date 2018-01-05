@@ -17,7 +17,7 @@ class GeneViewSet(viewsets.ReadOnlyModelViewSet):
         'symbol',
         'synonyms__label',
     )
-    lookup_field = 'symbol'
+    lookup_field = 'symbol__iexact'
 
 
 class TranscriptViewSet(viewsets.ReadOnlyModelViewSet):

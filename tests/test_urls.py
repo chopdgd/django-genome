@@ -31,7 +31,7 @@ class TestGeneURLs(TestCase):
     def test_detail_reverse(self):
         """genome:gene-detail should reverse to /genes/symbol/."""
         self.assertEqual(
-            reverse('genome:gene-detail', kwargs={'symbol': 'symbol'}),
+            reverse('genome:gene-detail', kwargs={'symbol__iexact': 'symbol'}),
             '/genes/symbol/'
         )
 
