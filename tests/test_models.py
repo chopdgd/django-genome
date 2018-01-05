@@ -67,10 +67,10 @@ class TestCytoBand(object):
 class TestGene(object):
 
     def test_str(self, Gene):
-        assert str(Gene) == 'symbol'
+        assert str(Gene) == 'SYMBOL'
 
     def test_attributes(self, Gene):
-        assert Gene.symbol == 'symbol'
+        assert Gene.symbol == 'SYMBOL'
         assert Gene.name == 'name'
         assert Gene.hgnc_id == 1
         assert Gene.status == 1

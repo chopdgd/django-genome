@@ -150,6 +150,10 @@ class Gene(TimeStampedModel):
     def __str__(self):
         return self.symbol
 
+    def save(self, **kwargs):
+        self.symbol = self.symbol.upper()
+        super(Gene, self).save(**kwargs)
+
     @staticmethod
     def build_urls(url, field):
         if field:

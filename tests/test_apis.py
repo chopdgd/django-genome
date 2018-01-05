@@ -57,7 +57,7 @@ class TestGeneAPI(APITestCase):
         response_json = response.json()['results']
         assert response_json[0]['id'] == 1
         assert response_json[0]['hgnc_id'] == 1
-        assert response_json[0]['symbol'] == 'symbol'
+        assert response_json[0]['symbol'] == 'SYMBOL'
         assert response_json[0]['name'] == 'name'
         assert response_json[0]['status'] == 'approved'
         assert response_json[0]['chromosome'] == 'LABEL'
@@ -85,7 +85,7 @@ class TestGeneAPI(APITestCase):
         """Test PUT."""
 
         response = self.client.put(
-            reverse('genome:gene-detail', kwargs={'symbol': 'symbol'}),
+            reverse('genome:gene-detail', kwargs={'symbol__iexact': 'symbol'}),
             {},
             format='json'
         )
@@ -97,7 +97,7 @@ class TestGeneAPI(APITestCase):
         """Test PATCH."""
 
         response = self.client.patch(
-            reverse('genome:gene-detail', kwargs={'symbol': 'symbol'}),
+            reverse('genome:gene-detail', kwargs={'symbol__iexact': 'symbol'}),
             {},
             format='json'
         )
@@ -108,7 +108,7 @@ class TestGeneAPI(APITestCase):
     def test_delete(self):
         """Test DELETE."""
         response = self.client.delete(
-            reverse('genome:gene-detail', kwargs={'symbol': 'symbol'}),
+            reverse('genome:gene-detail', kwargs={'symbol__iexact': 'symbol'}),
             format='json'
         )
 
@@ -153,7 +153,7 @@ class TestTranscriptAPI(APITestCase):
         response_json = response.json()['results']
         assert response_json[0]['id'] == 1
         assert response_json[0]['label'] == 'label'
-        assert response_json[0]['gene'] == 'symbol'
+        assert response_json[0]['gene'] == 'SYMBOL'
         assert response_json[0]['strand'] == '+'
         assert response_json[0]['transcription_start'] == 1
         assert response_json[0]['transcription_end'] == 1

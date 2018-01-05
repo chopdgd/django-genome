@@ -40,8 +40,9 @@ def test_gene_sync(retrieve_compressed_data_mock, retrieve_data_mock):
     retrieve_compressed_data_mock.assert_called_once_with('http://hgdownload.cse.ucsc.edu/goldenPath/hg18/database/kgXref.txt.gz')
 
     # Make sure it creates the HGNC gene object
-    gene_obj = models.Gene.objects.get(symbol='SYMBOL')
+    gene_obj = models.Gene.objects.get(symbol__iexact='symbol')
     assert gene_obj.id == 1
+    assert gene_obj.symbol == 'SYMBOL'
     assert gene_obj.name == 'name'
     assert gene_obj.hgnc_id == 1
     assert gene_obj.status == 1
@@ -60,7 +61,7 @@ def test_gene_sync(retrieve_compressed_data_mock, retrieve_data_mock):
     assert len(gene_obj.synonyms.all()) == 2
 
     # Make sure it creates the kgXref gene object
-    gene2_obj = models.Gene.objects.get(symbol='SYMBOL2')
+    gene2_obj = models.Gene.objects.get(symbol__iexact='symbol2')
     assert gene2_obj.id == 2
     assert gene2_obj.symbol == 'SYMBOL2'
     assert gene2_obj.name == 'name'
