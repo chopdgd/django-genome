@@ -6,6 +6,20 @@ from rest_framework.filters import SearchFilter
 from . import filters, models, serializers
 
 
+class GenomeViewSet(viewsets.ReadOnlyModelViewSet):
+    """ViewSet for viewing Transcripts."""
+
+    queryset = models.Genome.objects.all()
+    serializer_class = serializers.GenomeSerializer
+    filter_backends = (DjangoFilterBackend, SearchFilter)
+    filter_class = filters.GenomeFilter
+    search_fields = (
+        'label',
+        'description',
+    )
+    lookup_field = 'label'
+
+
 class GeneViewSet(viewsets.ReadOnlyModelViewSet):
     """ViewSet for viewing Genes."""
 
