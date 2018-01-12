@@ -33,11 +33,14 @@ Install Django Genome::
 
     pip install django-genome
 
-Add it to your `INSTALLED_APPS`:
+Add it to your `INSTALLED_APPS` (along with DRF and django-filters):
 
 .. code-block:: python
 
     INSTALLED_APPS = (
+        ...
+        'rest_framework',
+        'django_filters',
         ...
         'genome',
         ...
