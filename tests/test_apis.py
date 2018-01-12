@@ -20,6 +20,96 @@ from rest_framework.test import APIClient, APITestCase
 from . import fixtures
 
 
+class TestGenomeAPI(APITestCase):
+
+    def setUp(self):
+        """Define the test client and other test variables."""
+        self.client = APIClient()
+
+        # Create instance for GET, PUT, PATCH, DELETE Methods
+        fixtures.Gene()
+
+    def test_post(self):
+        """Test POST."""
+
+        response = self.client.post(
+            reverse('genome:genome-list'),
+            {},
+            format='json'
+        )
+
+        # Make sure to recieve correct HTTP code
+        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+    def test_get(self):
+        """Test GET."""
+
+        response = self.client.get(
+            reverse('genome:genome-list'),
+            format='json'
+        )
+
+        # Make sure to recieve correct HTTP code
+        assert response.status_code == status.HTTP_200_OK
+
+        # Make sure data is correct
+        response_json = response.json()['results']
+        assert response_json[0]['id'] == 1
+        assert response_json[0]['label'] == 'label'
+        assert response_json[0]['description'] == ''
+        assert response_json[0]['description_url'] == 'https://www.google.com'
+        assert response_json[0]['active'] is True
+
+        # Make sure all expected keys are in the response
+        observed_keys = list(response_json[0].keys())
+        expected_keys = [
+            'id',
+            'label',
+            'description',
+            'description_url',
+            'active',
+            'created',
+            'modified'
+        ]
+        difference = set(observed_keys).difference(set(expected_keys))
+        assert len(difference) == 0
+
+    def test_put(self):
+        """Test PUT."""
+
+        response = self.client.put(
+            reverse('genome:genome-detail', kwargs={'label': 'label'}),
+            {},
+            format='json'
+        )
+
+        # Make sure to recieve correct HTTP code
+        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    def test_patch(self):
+        """Test PATCH."""
+
+        response = self.client.patch(
+            reverse('genome:genome-detail', kwargs={'label': 'label'}),
+            {},
+            format='json'
+        )
+
+        # Make sure to recieve correct HTTP code
+        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    def test_delete(self):
+        """Test DELETE."""
+        response = self.client.delete(
+            reverse('genome:genome-detail', kwargs={'label': 'label'}),
+            format='json'
+        )
+
+        # Make sure to recieve correct HTTP code
+        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
 class TestGeneAPI(APITestCase):
 
     def setUp(self):

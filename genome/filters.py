@@ -8,6 +8,24 @@ from genomix.filters import DisplayChoiceFilter
 from . import choices, models
 
 
+class GenomeFilter(django_filters.rest_framework.FilterSet):
+
+    class Meta:
+        model = models.Genome
+        fields = [
+            'label',
+            'description',
+        ]
+        filter_overrides = {
+            CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'icontains',
+                },
+            },
+        }
+
+
 class GeneFilter(django_filters.rest_framework.FilterSet):
 
     status = DisplayChoiceFilter(choices=choices.HGNC_GENE_STATUS)

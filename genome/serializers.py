@@ -5,6 +5,17 @@ from rest_framework import serializers
 from . import choices, models
 
 
+class GenomeSerializer(serializers.ModelSerializer):
+    """Serializer for Genes."""
+
+    class Meta:
+        model = models.Genome
+        fields = (
+            'id', 'label', 'description', 'description_url',
+            'active', 'created', 'modified',
+        )
+
+
 class GeneSerializer(serializers.ModelSerializer):
     """Serializer for Genes."""
 
