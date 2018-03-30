@@ -39,3 +39,12 @@ History
 `Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.2.2...v0.3.0)>`_
 
 * Updated requirements to the latest
+
+
+0.4.0 (2018-03-30)
+++++++++++++++++++
+
+`Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.3.0...v0.4.0)>`_
+
+* Added API for chromosomes
+* Changed gene_symbol from being unique
