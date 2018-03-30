@@ -5,8 +5,20 @@ from rest_framework import serializers
 from . import choices, models
 
 
+class ChromosomeSerializer(serializers.ModelSerializer):
+    """Serializer for Chromosomes."""
+
+    genome = serializers.StringRelatedField()
+
+    class Meta:
+        model = models.Chromosome
+        fields = (
+            'id', 'genome', 'label', 'length', 'active'
+        )
+
+
 class GenomeSerializer(serializers.ModelSerializer):
-    """Serializer for Genes."""
+    """Serializer for Genomes."""
 
     class Meta:
         model = models.Genome

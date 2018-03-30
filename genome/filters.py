@@ -8,6 +8,24 @@ from genomix.filters import DisplayChoiceFilter
 from . import choices, models
 
 
+class ChromosomeFilter(django_filters.rest_framework.FilterSet):
+
+    class Meta:
+        model = models.Chromosome
+        fields = [
+            'label',
+            'genome'
+        ]
+        filter_overrides = {
+            CharField: {
+                'filter_class': django_filters.CharFilter,
+                'extra': lambda f: {
+                    'lookup_expr': 'iexact',
+                },
+            },
+        }
+
+
 class GenomeFilter(django_filters.rest_framework.FilterSet):
 
     class Meta:

@@ -14,6 +14,21 @@ from test_plus.test import TestCase
 from . import fixtures
 
 
+class TestChromosomeURLs(TestCase):
+    """Test URL patterns for Genes."""
+
+    def setUp(self):
+        self.instance = fixtures.Chromosome()
+
+    def test_list_reverse(self):
+        """genome:chromosome-list should reverse to /chromosomes/."""
+        self.assertEqual(reverse('genome:chromosome-list'), '/chromosomes/')
+
+    def test_list_resolve(self):
+        """/chromosomes/ should resolve to genome:chromosomes-list."""
+        self.assertEqual(resolve('/chromosomes/').view_name, 'genome:chromosome-list')
+
+
 class TestGeneURLs(TestCase):
     """Test URL patterns for Genes."""
 
