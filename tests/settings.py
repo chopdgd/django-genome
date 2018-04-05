@@ -35,6 +35,7 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "django_filters",
+    "graphene_django",
 ]
 
 SITE_ID = 1
@@ -136,4 +137,12 @@ LOGGING = {
             'propagate': True,
         }
     }
+}
+
+
+GRAPHENE = {
+    'SCHEMA': 'tests.schema.schema',
+    'MIDDLEWARE': [
+        'graphene_django.debug.DjangoDebugMiddleware',
+    ]
 }
