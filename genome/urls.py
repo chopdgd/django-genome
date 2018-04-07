@@ -3,7 +3,7 @@ from rest_framework import routers
 
 from . import viewsets
 
-
+app_name = 'genome'
 router = routers.SimpleRouter()
 router.register(r'chromosomes', viewsets.ChromosomeViewSet)
 router.register(r'genomes', viewsets.GenomeViewSet)

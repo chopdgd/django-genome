@@ -6,8 +6,7 @@ test django-genome
 ------------
 Tests for `django-genome` urls module.
 """
-
-from django.core.urlresolvers import reverse, resolve
+from django.urls import resolve, reverse
 
 from test_plus.test import TestCase
 
