@@ -55,3 +55,11 @@ History
 `Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.4.0...v0.5.0>`_
 
 * Added GraphQL Nodes
+
+0.6.0 (2018-04-07)
+++++++++++++++++++
+
+`Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.5.0...v0.6.0>`_
+
+* Added support for Django 2 and Python 3.6
+* Dropped support for Django < 1.11 and Python 2.7, 3.3, 3.4

@@ -59,7 +59,7 @@ setup(
     install_requires=[
         'djangorestframework==3.7.7',
         'django-filter==1.1.0',
-        'django-genomix==0.5.0',
+        'django-genomix==0.6.0',
         'django-model-utils==3.1.1',
         'graphene-django==2.0.0',
     ],
