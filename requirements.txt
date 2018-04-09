@@ -1,7 +1,7 @@
 
 # Additional requirements go here
 
-djangorestframework==3.7.7
+djangorestframework==3.8.2
 
 django-filter==1.1.0
 django-genomix==0.6.0
