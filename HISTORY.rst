@@ -70,3 +70,10 @@ History
 `Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.6.0...v0.6.1>`_
 
 * Updated 3rd party libs
+
+0.6.2 (2018-05-14)
+++++++++++++++++++
+
+`Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.6.1...v0.6.2>`_
+
+* Updated chromosomes sync to ensure lexicographic ordering of chromosomes
