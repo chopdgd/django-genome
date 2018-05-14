@@ -40,17 +40,25 @@ class Command(BaseCommand):
 
         # Create Chromosome
         logger.info('Creating Chromosomes...')
+        chromsomes = []
         for line in chromosome_data:
             (label, length) = line.strip().split('\t')
 
             # NOTE: This is to remove weird Chromosomes
             new_label = utils.reformat_chromosome(label)
             if new_label:
-                chrom_obj, created = models.Chromosome.objects.get_or_create(
-                    label=new_label,
-                    genome=genome_obj,
-                    defaults={'length': length, }
-                )
+                chromsomes.append({
+                    "label": new_label,
+                    "number": utils.chromosome_number(new_label),
+                    "length": length,
+                })
+
+        for chromosome in sorted(chromsomes, key=lambda x: x['number']):
+            chrom_obj, created = models.Chromosome.objects.get_or_create(
+                label=chromosome['label'],
+                genome=genome_obj,
+                defaults={'length': chromosome['length'], }
+            )
 
         # Create CytoBand
         logger.info('Creating CytoBands...')
