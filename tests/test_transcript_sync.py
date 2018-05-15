@@ -29,7 +29,7 @@ def test_transcript_sync(retrieve_compressed_data_mock):
     # Create Gene object before calling transcript_sync
     Gene()
 
-    call_command('transcript_sync', genome_build='hg18')
+    call_command('transcript_sync', genome_build='hg18', sync_exons=True)
 
     # Make sure it is called with the right URLs
     retrieve_compressed_data_mock.assert_called_once_with('http://hgdownload.soe.ucsc.edu/goldenPath/hg18/database/refGene.txt.gz')
