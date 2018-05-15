@@ -21,6 +21,11 @@ class Command(BaseCommand):
             default='hg19',
             help='Genome build to load',
         )
+        parser.add_argument(
+            '--sync-exons',
+            action='store_true',
+            help='Sync Exons',
+        )
 
     def handle(self, *args, **options):
         genome = options['genome_build']
@@ -61,22 +66,23 @@ class Command(BaseCommand):
             )
 
             # Create Exon
-            exon_starts = [int(x) for x in line[9].strip().split(',') if x]
-            exon_ends = [int(x) for x in line[10].strip().split(',') if x]
-            number_of_exons = int(line[8])
-            for index, exon in enumerate(exon_starts):
+            if options['sync_exons']:
+                exon_starts = [int(x) for x in line[9].strip().split(',') if x]
+                exon_ends = [int(x) for x in line[10].strip().split(',') if x]
+                number_of_exons = int(line[8])
+                for index, exon in enumerate(exon_starts):
 
-                if strand == '+':  # NOTE: Positive strand exons count forward
-                    number = index + 1
+                    if strand == '+':  # NOTE: Positive strand exons count forward
+                        number = index + 1
 
-                elif strand == '-':  # NOTE: Negative strand exons count reverse
-                    number = number_of_exons - index
-                else:
-                    raise ValueError('strand: {0} is not supported!'.format(strand))
+                    elif strand == '-':  # NOTE: Negative strand exons count reverse
+                        number = number_of_exons - index
+                    else:
+                        raise ValueError('strand: {0} is not supported!'.format(strand))
 
-                exon_obj, created = models.Exon.objects.get_or_create(
-                    number=number,
-                    transcript=transcript_obj,
-                    start=exon_starts[index],
-                    end=exon_ends[index],
-                )
+                    exon_obj, created = models.Exon.objects.get_or_create(
+                        number=number,
+                        transcript=transcript_obj,
+                        start=exon_starts[index],
+                        end=exon_ends[index],
+                    )
