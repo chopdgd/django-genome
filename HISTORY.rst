@@ -84,3 +84,10 @@ History
 `Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.6.2...v0.6.3>`_
 
 * Updated sync to be able to skip sync of exons
+
+0.6.4 (2018-05-16)
+++++++++++++++++++
+
+`Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.6.3...v0.6.4>`_
+
+* Updated setup.py to read requirements.txt
