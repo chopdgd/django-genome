@@ -21,6 +21,12 @@ def get_version(*file_paths):
     raise RuntimeError('Unable to find version string.')
 
 
+def parse_requirements():
+    """ load requirements from a pip requirements file """
+    lineiter = (line.strip() for line in open('requirements.txt'))
+    return [line for line in lineiter if line and not line.startswith("#")]
+
+
 version = get_version("genome", "__init__.py")
 
 
@@ -56,13 +62,7 @@ setup(
         'genome',
     ],
     include_package_data=True,
-    install_requires=[
-        'djangorestframework==3.8.2',
-        'django-filter==1.1.0',
-        'django-genomix==0.6.1',
-        'django-model-utils==3.1.2',
-        'graphene-django==2.0.0',
-    ],
+    install_requires=parse_requirements(),
     license="MIT",
     zip_safe=False,
     keywords='django-genome',
