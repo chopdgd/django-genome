@@ -111,3 +111,17 @@ def Exon():
         end=1,
         cds=True,
     )
+
+
+@pytest.fixture
+def GeneList():
+
+    return mommy.make(
+        'genome.GeneList',
+        id=1,
+        label='GeneList',
+        description='description',
+        version='version',
+        active=True,
+        genes=[Gene()],
+    )

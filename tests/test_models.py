@@ -18,6 +18,7 @@ from .fixtures import (
     GeneSynonym,
     Transcript,
     Exon,
+    GeneList,
 )
 
 
@@ -170,3 +171,17 @@ class TestExon(object):
         assert Exon.start == 1
         assert Exon.end == 1
         assert Exon.cds is True
+
+
+@pytest.mark.django_db
+class TestGeneList(object):
+
+    def test_str(self, GeneList):
+        assert str(GeneList) == 'GeneList'
+
+    def test_attributes(self, GeneList):
+        assert GeneList.label == 'GeneList'
+        assert GeneList.description == 'description'
+        assert GeneList.version == 'version'
+        assert GeneList.active is True
+        assert str(GeneList.genes.all()[0]) == 'SYMBOL'

@@ -277,3 +277,24 @@ class Exon(TimeStampedModel):
 
     def __str__(self):
         return str(self.number)
+
+
+class GeneList(TimeStampedModel):
+    """Collection of genes to use a gene list for analysis, etc."""
+    label = models.CharField(max_length=50)
+    description = models.CharField(max_length=255, blank=True)
+    version = models.CharField(max_length=25)
+    active = models.BooleanField(default=True)
+    genes = models.ManyToManyField(
+        'genome.Gene',
+        related_name='gene_lists',
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name = _('Gene List')
+        verbose_name_plural = _('Gene Lists')
+        unique_together = ('label', 'version')
+
+    def __str__(self):
+        return self.label
