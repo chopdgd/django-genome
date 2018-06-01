@@ -91,3 +91,11 @@ History
 `Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.6.3...v0.6.4>`_
 
 * Updated setup.py to read requirements.txt
+
+0.7.0 (2018-06-01)
+++++++++++++++++++
+
+`Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.6.4...v0.7.0>`_
+
+* Added Gene List model
+* Removed support for GraphQL - this is not needed here.  Applications that import this package can set up Nodes/Schema using models
