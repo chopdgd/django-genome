@@ -99,3 +99,11 @@ History
 
 * Added Gene List model
 * Removed support for GraphQL - this is not needed here.  Applications that import this package can set up Nodes/Schema using models
+
+0.7.1 (2018-06-07)
+++++++++++++++++++
+
+`Full Changelog <https://github.com/chopdgd/django-genome/compare/v0.7.0...v0.7.1>`_
+
+* #54 - Updated management methods to allow for updating when retrieving latest changes from RefSeq
+* #56 - Updated Gene model to have property ensembl_gene_id - which will check HGNC and Ensembl provided gene Ids
