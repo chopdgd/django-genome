@@ -53,7 +53,7 @@ class Command(BaseCommand):
                 # NOTE: We skip weird genes like LOC, etc...
                 continue
 
-            transcript_obj, created = models.Transcript.objects.get_or_create(
+            transcript_obj, created = models.Transcript.objects.update_or_create(
                 label=label,
                 gene=gene_obj,
                 defaults={
@@ -80,7 +80,7 @@ class Command(BaseCommand):
                     else:
                         raise ValueError('strand: {0} is not supported!'.format(strand))
 
-                    exon_obj, created = models.Exon.objects.get_or_create(
+                    exon_obj, created = models.Exon.objects.update_or_create(
                         number=number,
                         transcript=transcript_obj,
                         start=exon_starts[index],

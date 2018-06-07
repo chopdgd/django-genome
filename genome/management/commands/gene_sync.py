@@ -71,7 +71,7 @@ class Command(BaseCommand):
                 )
             except ObjectDoesNotExist:
                 chromosome_obj = None
-            gene_obj, created = models.Gene.objects.get_or_create(
+            gene_obj, created = models.Gene.objects.update_or_create(
                 symbol=symbol.upper(),
                 chromosome=chromosome_obj,
                 defaults={
@@ -104,7 +104,7 @@ class Command(BaseCommand):
             for synonym in synonyms + previous_symbols:
                 label = synonym.strip()
                 if label:
-                    synonym_obj, created = models.GeneSynonym.objects.get_or_create(label=label)
+                    synonym_obj, created = models.GeneSynonym.objects.update_or_create(label=label)
                     gene_obj.synonyms.add(synonym_obj)
 
             gene_obj.save()
@@ -117,7 +117,7 @@ class Command(BaseCommand):
             refseq = line[5]
             name = line[7]
 
-            gene_obj, created = models.Gene.objects.get_or_create(
+            gene_obj, created = models.Gene.objects.update_or_create(
                 symbol=symbol.upper(),
                 defaults={
                     'refseq': refseq,
