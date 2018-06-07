@@ -205,6 +205,19 @@ class Gene(TimeStampedModel):
             self.not_curated_rat_genome_database,
         )
 
+    @property
+    def ensembl_gene_id(self):
+        ids = []
+
+        if self.ensembl:
+            ids.append(self.ensembl)
+
+        if self.not_curated_ensembl:
+            ids.extend(self.not_curated_ensembl.split(','))
+
+        if len(ids) > 0:
+            return ids[0]
+
 
 class GeneSynonym(TimeStampedModel):
     """Other symbols used to refer to a Gene."""

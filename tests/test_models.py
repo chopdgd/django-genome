@@ -8,6 +8,7 @@ test_django-genome
 Tests for `django-genome` models module.
 """
 
+from model_mommy import mommy
 import pytest
 
 from .fixtures import (
@@ -127,6 +128,13 @@ class TestGene(object):
         assert Gene.rgd_urls == [
             'http://rgd.mcw.edu/rgdweb/report/gene/main.html?id=not_curated_rat_genome_database',
         ]
+
+    def test_ensembl_gene_id(self, Gene):
+        assert Gene.ensembl_gene_id == 'ensembl'
+
+        # NOTE: These case where ensembl is blank
+        ensembl_blank = mommy.make('genome.Gene', ensembl="", not_curated_ensembl='nc1,nc3')
+        assert ensembl_blank.ensembl_gene_id == 'nc1'
 
 
 @pytest.mark.django_db
