@@ -33,7 +33,7 @@ class Command(BaseCommand):
 
         # Create Genome
         logger.info('Creating Genome...')
-        genome_obj, created = models.Genome.objects.get_or_create(
+        genome_obj, created = models.Genome.objects.update_or_create(
             label=genome,
             defaults={'description_url': description_url}
         )
@@ -54,7 +54,7 @@ class Command(BaseCommand):
                 })
 
         for chromosome in sorted(chromsomes, key=lambda x: x['number']):
-            chrom_obj, created = models.Chromosome.objects.get_or_create(
+            chrom_obj, created = models.Chromosome.objects.update_or_create(
                 label=chromosome['label'],
                 genome=genome_obj,
                 defaults={'length': chromosome['length'], }
@@ -73,7 +73,7 @@ class Command(BaseCommand):
                     genome=genome_obj,
                 )
 
-                cytoband_obj, created = models.CytoBand.objects.get_or_create(
+                cytoband_obj, created = models.CytoBand.objects.update_or_create(
                     label=label,
                     chromosome=chrom_obj,
                     defaults={
