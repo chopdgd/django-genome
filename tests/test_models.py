@@ -164,6 +164,7 @@ class TestTranscript(object):
         assert Transcript.transcription_end == 1
         assert Transcript.cds_start == 1
         assert Transcript.cds_end == 1
+        assert Transcript.preferred_transcript is True
 
 
 @pytest.mark.django_db

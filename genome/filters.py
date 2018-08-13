@@ -94,6 +94,7 @@ class TranscriptFilter(django_filters.rest_framework.FilterSet):
             'transcription_end',
             'cds_start',
             'cds_end',
+            'preferred_transcript',
         ]
         filter_overrides = {
             CharField: {

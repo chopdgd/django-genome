@@ -254,6 +254,8 @@ class Transcript(TimeStampedModel):
     cds_start = models.PositiveIntegerField()
     cds_end = models.PositiveIntegerField()
 
+    preferred_transcript = models.BooleanField(default=False)
+
     objects = managers.TranscriptQuerySet.as_manager()
 
     class Meta:
