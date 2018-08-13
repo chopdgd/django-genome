@@ -107,3 +107,10 @@ History
 
 * #54 - Updated management methods to allow for updating when retrieving latest changes from RefSeq
 * #56 - Updated Gene model to have property ensembl_gene_id - which will check HGNC and Ensembl provided gene Ids
+
+0.7.2 (2018-08-13)
+++++++++++++++++++
+
+`Full Changelog https://github.com/chopdgd/django-genome/compare/v0.7.1...v0.7.2>`_
+
+* Updated 3rd party requirements. Some requirements had changed so it was causing failures
