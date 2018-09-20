@@ -46,13 +46,14 @@ class GeneSerializer(serializers.ModelSerializer):
 class TranscriptSerializer(serializers.ModelSerializer):
     """Serializer for Transcripts."""
 
+    chromosome = serializers.StringRelatedField(source='gene.chromosome')
     gene = serializers.StringRelatedField()
     strand = DisplayChoiceField(choices=choices.STRAND_TYPES)
 
     class Meta:
         model = models.Transcript
         fields = (
-            'id', 'label', 'gene', 'strand',
+            'id', 'label', 'gene', 'strand', 'chromosome',
             'transcription_start', 'transcription_end', 'cds_start', 'cds_end',
             'active', 'created', 'modified',
         )

@@ -348,6 +348,7 @@ class TestTranscriptAPI(APITestCase):
             'label',
             'gene',
             'strand',
+            'chromosome',
             'transcription_start',
             'transcription_end',
             'cds_start',
