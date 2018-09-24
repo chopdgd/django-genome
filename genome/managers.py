@@ -11,7 +11,7 @@ class GeneQuerySet(models.QuerySet):
 class TranscriptQuerySet(models.QuerySet):
 
     def fast(self):
-        return self.select_related('gene').all()
+        return self.select_related('gene__chromosome').all()
 
 
 class ExonQuerySet(models.QuerySet):
