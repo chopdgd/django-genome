@@ -114,3 +114,10 @@ History
 `Full Changelog https://github.com/chopdgd/django-genome/compare/v0.7.1...v0.7.2>`_
 
 * Updated 3rd party requirements. Some requirements had changed so it was causing failures
+
+0.7.3 (2018-09-26)
+++++++++++++++++++
+
+`Full Changelog https://github.com/chopdgd/django-genome/compare/v0.7.2...v0.7.3>`_
+
+* Updated transcript model to include preferred transcript boolean
