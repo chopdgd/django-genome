@@ -95,6 +95,7 @@ def Transcript():
         transcription_end=1,
         cds_start=1,
         cds_end=1,
+        preferred_transcript=True,
     )
 
 
