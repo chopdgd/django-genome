@@ -121,3 +121,10 @@ History
 `Full Changelog https://github.com/chopdgd/django-genome/compare/v0.7.2...v0.7.3>`_
 
 * Updated transcript model to include preferred transcript boolean
+
+0.7.4 (2018-10-29)
+++++++++++++++++++
+
+`Full Changelog https://github.com/chopdgd/django-genome/compare/v0.7.3...v0.7.4>`_
+
+* Updated 3rd party libs
