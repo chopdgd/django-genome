@@ -35,6 +35,5 @@ class Command(BaseCommand):
             preferred_transcript = columns[0]
 
             Transcript.objects.filter(
-                Q(gene__chromosome__genome=genome) &
-                Q(label__iexact=preferred_transcript)
+                Q(gene__chromosome__genome=genome) & Q(label__iexact=preferred_transcript)
             ).update(preferred_transcript=True)
