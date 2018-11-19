@@ -21,14 +21,15 @@ from genome import models
 @mock.patch.object(utils, 'retrieve_compressed_data')
 def test_gene_sync(retrieve_compressed_data_mock, retrieve_data_mock):
     retrieve_data_mock.return_value = [
-        'Approved Symbol\tApproved Name\tHGNC ID\tStatus\tChromosome\tPrevious Name\tLocus Type\tLocus Group\tEnsembl Gene ID\t'
-        'RefSeq IDs\tEnsembl ID(supplied by Ensembl)\tRefSeq(supplied by NCBI)\tUCSC ID(supplied by UCSC)\tOMIM ID(supplied by OMIM)\t'
-        'UniProt ID(supplied by UniProt)\tMouse Genome Database ID(supplied by MGI)\tRat Genome Database ID(supplied by RGD)\t'
-        'Synonyms\tPrevious Symbols',
+        'APPROVED SYMBOL\tAPPROVED NAME\tHGNC ID\tSTATUS\tCHROMOSOME\tPREVIOUS NAME\tLOCUS TYPE\tLOCUS GROUP\tENSEMBL GENE ID\t'
+        'REFSEQ IDS\tENSEMBL ID(SUPPLIED BY ENSEMBL)\tREFSEQ(SUPPLIED BY NCBI)\tUCSC ID(SUPPLIED BY UCSC)\tOMIM ID(SUPPLIED BY OMIM)\t'
+        'UNIPROT ID(SUPPLIED BY UNIPROT)\tMOUSE GENOME DATABASE ID(SUPPLIED BY MGI)\tRAT GENOME DATABASE ID(SUPPLIED BY RGD)\t'
+        'SYNONYMS\tPREVIOUS SYMBOLS',
         'symbol\tname\tHGNC:1\tapproved\tlabel\tprevious_name\ttype\tgroup\tensembl\t'
         'refseq\tnc_ensembl\tnc_refeq\tnc_ucsc\tnc_omim\t'
         'nc_uniprot\tnc_mgi\tnc_rgd\tSynonym\tPrevious_Symbol'
     ]
+
     retrieve_compressed_data_mock.return_value = [
         'na\tna\tna\tna\tsymbol2\trefseq\tna\tname'
     ]
