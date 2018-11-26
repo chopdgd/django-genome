@@ -12,7 +12,7 @@ class ChromosomeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Chromosome.objects.all()
     serializer_class = serializers.ChromosomeSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
-    filter_class = filters.ChromosomeFilter
+    filterset_class = filters.ChromosomeFilter
     lookup_field = 'label'
 
 
@@ -22,7 +22,7 @@ class GenomeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Genome.objects.all()
     serializer_class = serializers.GenomeSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
-    filter_class = filters.GenomeFilter
+    filterset_class = filters.GenomeFilter
     search_fields = (
         'label',
         'description',
@@ -36,7 +36,7 @@ class GeneViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Gene.objects.fast()
     serializer_class = serializers.GeneSerializer
     filter_backends = (DjangoFilterBackend, SearchFilter)
-    filter_class = filters.GeneFilter
+    filterset_class = filters.GeneFilter
     search_fields = (
         'symbol',
         'synonyms__label',
@@ -50,7 +50,7 @@ class TranscriptViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Transcript.objects.fast()
     serializer_class = serializers.TranscriptSerializer
     filter_backends = (DjangoFilterBackend, )
-    filter_class = filters.TranscriptFilter
+    filterset_class = filters.TranscriptFilter
     lookup_field = 'label'
 
 
@@ -60,4 +60,4 @@ class ExonViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = models.Exon.objects.fast()
     serializer_class = serializers.ExonSerializer
     filter_backends = (DjangoFilterBackend, )
-    filter_class = filters.ExonFilter
+    filterset_class = filters.ExonFilter

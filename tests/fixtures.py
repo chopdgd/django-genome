@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 from model_mommy import mommy
-import pytest
 
 
-@pytest.fixture
 def Genome():
-
     return mommy.make(
         'genome.Genome',
         id=1,
@@ -14,9 +11,7 @@ def Genome():
     )
 
 
-@pytest.fixture
 def Chromosome():
-
     return mommy.make(
         'genome.Chromosome',
         id=1,
@@ -27,9 +22,7 @@ def Chromosome():
     )
 
 
-@pytest.fixture
 def CytoBand():
-
     return mommy.make(
         'genome.CytoBand',
         id=1,
@@ -42,9 +35,7 @@ def CytoBand():
     )
 
 
-@pytest.fixture
 def Gene():
-
     return mommy.make(
         'genome.Gene',
         id=1,
@@ -70,9 +61,7 @@ def Gene():
     )
 
 
-@pytest.fixture
 def GeneSynonym():
-
     return mommy.make(
         'genome.GeneSynonym',
         id=1,
@@ -81,9 +70,7 @@ def GeneSynonym():
     )
 
 
-@pytest.fixture
 def Transcript():
-
     return mommy.make(
         'genome.Transcript',
         id=1,
@@ -99,9 +86,7 @@ def Transcript():
     )
 
 
-@pytest.fixture
 def Exon():
-
     return mommy.make(
         'genome.Exon',
         id=1,
@@ -114,9 +99,7 @@ def Exon():
     )
 
 
-@pytest.fixture
 def GeneList():
-
     return mommy.make(
         'genome.GeneList',
         id=1,
