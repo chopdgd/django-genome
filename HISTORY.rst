@@ -128,3 +128,10 @@ History
 `Full Changelog https://github.com/chopdgd/django-genome/compare/v0.7.3...v0.7.4>`_
 
 * Updated 3rd party libs
+
+0.7.6 (2018-11-27)
+++++++++++++++++++
+
+`Full Changelog https://github.com/chopdgd/django-genome/compare/v0.7.5...v0.7.6>`_
+
+* HGNC changed their headers - so gene sync was broken.  Made reading headers case insensitive
