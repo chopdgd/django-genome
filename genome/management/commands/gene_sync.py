@@ -37,30 +37,29 @@ class Command(BaseCommand):
 
         # Create Gene
         logger.info('Creating Genes from HGNC...')
-        hgnc_header = hgnc_data.pop(0).strip().split('\t')
+        hgnc_header = [text.upper() for text in hgnc_data.pop(0).strip().split('\t')]
 
         for line in hgnc_data:
             hgnc_gene_data = line.split('\t')
-
-            symbol = hgnc_gene_data[hgnc_header.index('Approved Symbol')]
-            name = hgnc_gene_data[hgnc_header.index('Approved Name')]
+            symbol = hgnc_gene_data[hgnc_header.index('APPROVED SYMBOL')]
+            name = hgnc_gene_data[hgnc_header.index('APPROVED NAME')]
             hgnc_id = hgnc_gene_data[hgnc_header.index('HGNC ID')]
-            status = hgnc_gene_data[hgnc_header.index('Status')]
-            chromosome = hgnc_gene_data[hgnc_header.index('Chromosome')]
-            previous_name = hgnc_gene_data[hgnc_header.index('Previous Name')]
-            locus_type = hgnc_gene_data[hgnc_header.index('Locus Type')]
-            locus_group = hgnc_gene_data[hgnc_header.index('Locus Group')]
-            ensembl = hgnc_gene_data[hgnc_header.index('Ensembl Gene ID')]
-            refseq = hgnc_gene_data[hgnc_header.index('RefSeq IDs')]
-            not_curated_ensembl = hgnc_gene_data[hgnc_header.index('Ensembl ID(supplied by Ensembl)')]
-            not_curated_refseq = hgnc_gene_data[hgnc_header.index('RefSeq(supplied by NCBI)')]
-            not_curated_ucsc = hgnc_gene_data[hgnc_header.index('UCSC ID(supplied by UCSC)')]
-            not_curated_omim = hgnc_gene_data[hgnc_header.index('OMIM ID(supplied by OMIM)')]
-            not_curated_uniprot = hgnc_gene_data[hgnc_header.index('UniProt ID(supplied by UniProt)')]
+            status = hgnc_gene_data[hgnc_header.index('STATUS')]
+            chromosome = hgnc_gene_data[hgnc_header.index('CHROMOSOME')]
+            previous_name = hgnc_gene_data[hgnc_header.index('PREVIOUS NAME')]
+            locus_type = hgnc_gene_data[hgnc_header.index('LOCUS TYPE')]
+            locus_group = hgnc_gene_data[hgnc_header.index('LOCUS GROUP')]
+            ensembl = hgnc_gene_data[hgnc_header.index('ENSEMBL GENE ID')]
+            refseq = hgnc_gene_data[hgnc_header.index('REFSEQ IDS')]
+            not_curated_ensembl = hgnc_gene_data[hgnc_header.index('ENSEMBL ID(SUPPLIED BY ENSEMBL)')]
+            not_curated_refseq = hgnc_gene_data[hgnc_header.index('REFSEQ(SUPPLIED BY NCBI)')]
+            not_curated_ucsc = hgnc_gene_data[hgnc_header.index('UCSC ID(SUPPLIED BY UCSC)')]
+            not_curated_omim = hgnc_gene_data[hgnc_header.index('OMIM ID(SUPPLIED BY OMIM)')]
+            not_curated_uniprot = hgnc_gene_data[hgnc_header.index('UNIPROT ID(SUPPLIED BY UNIPROT)')]
             not_curated_mouse_genome_database = hgnc_gene_data[
-                hgnc_header.index('Mouse Genome Database ID(supplied by MGI)')]
+                hgnc_header.index('MOUSE GENOME DATABASE ID(SUPPLIED BY MGI)')]
             not_curated_rat_genome_database = hgnc_gene_data[
-                hgnc_header.index('Rat Genome Database ID(supplied by RGD)')]
+                hgnc_header.index('RAT GENOME DATABASE ID(SUPPLIED BY RGD)')]
 
             # normalize chromosome
             chromosome = utils.reformat_chromosome(chromosome)
@@ -95,10 +94,10 @@ class Command(BaseCommand):
 
             # Create GeneSynonym
             synonyms = hgnc_gene_data[
-                hgnc_header.index('Synonyms')
+                hgnc_header.index('SYNONYMS')
             ].strip().split(',')
             previous_symbols = hgnc_gene_data[
-                hgnc_header.index('Previous Symbols')
+                hgnc_header.index('PREVIOUS SYMBOLS')
             ].strip().split(',')
 
             for synonym in synonyms + previous_symbols:
