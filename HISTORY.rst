@@ -135,3 +135,11 @@ History
 `Full Changelog https://github.com/chopdgd/django-genome/compare/v0.7.5...v0.7.6>`_
 
 * HGNC changed their headers - so gene sync was broken.  Made reading headers case insensitive
+
+0.7.7 (2019-02-08)
+++++++++++++++++++
+
+`Full Changelog https://github.com/chopdgd/django-genome/compare/v0.7.6...v0.7.7>`_
+
+* Updated 3rd party libs
+* Updated tests to use py.test fixtures correctly
