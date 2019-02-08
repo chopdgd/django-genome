@@ -7,483 +7,318 @@ test django-genome
 Tests for `django-genome` API.
 """
 
-from django.contrib.auth import get_user_model
-
 try:
     from django.urls import reverse
 except:
     from django.core.urlresolvers import reverse
 
+import pytest
 from rest_framework import status
-from rest_framework.test import APIClient, APITestCase
+from rest_framework.test import APIClient
 
-from . import fixtures
+from .fixtures import *
 
 
-class TestChromosomeAPI(APITestCase):
+@pytest.mark.django_db
+def setup_client(user=None):
+    client = APIClient()
 
-    def setUp(self):
-        """Define the test client and other test variables."""
-        self.client = APIClient()
+    if user:
+        client.force_authenticate(user=user)
 
-        # Create instance for GET, PUT, PATCH, DELETE Methods
-        fixtures.Gene()
+    return client
 
-    def test_post(self):
-        """Test POST."""
 
-        response = self.client.post(
-            reverse('genome:chromosome-list'),
-            {},
-            format='json'
-        )
+def test_api_permissions():
+    client = setup_client()
 
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    response = client.post(reverse('genome:genome-list'), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
+    response = client.post(reverse('genome:chromosome-list'), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
-    def test_get(self):
-        """Test GET."""
+    response = client.post(reverse('genome:gene-list'), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
-        response = self.client.get(
-            reverse('genome:chromosome-list'),
-            format='json'
-        )
+    response = client.post(reverse('genome:transcript-list'), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_200_OK
+    response = client.post(reverse('genome:exon-list'), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
-        # Make sure data is correct
-        response_json = response.json()['results']
-        assert response_json[0]['id'] == 1
-        assert response_json[0]['label'] == 'LABEL'
-        assert response_json[0]['length'] == 1
-        assert response_json[0]['genome'] == 'label'
-        assert response_json[0]['active'] is True
-
-        # Make sure all expected keys are in the response
-        observed_keys = list(response_json[0].keys())
-        expected_keys = [
-            'id',
-            'label',
-            'genome',
-            'length',
-            'active',
-            'created',
-            'modified'
-        ]
-        difference = set(observed_keys).difference(set(expected_keys))
-        assert len(difference) == 0
-
-    def test_put(self):
-        """Test PUT."""
-
-        response = self.client.put(
-            reverse('genome:chromosome-detail', kwargs={'label': 'label'}),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_patch(self):
-        """Test PATCH."""
-
-        response = self.client.patch(
-            reverse('genome:chromosome-detail', kwargs={'label': 'label'}),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_delete(self):
-        """Test DELETE."""
-        response = self.client.delete(
-            reverse('genome:chromosome-detail', kwargs={'label': 'label'}),
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-
-class TestGenomeAPI(APITestCase):
-
-    def setUp(self):
-        """Define the test client and other test variables."""
-        self.client = APIClient()
-
-        # Create instance for GET, PUT, PATCH, DELETE Methods
-        fixtures.Gene()
-
-    def test_post(self):
-        """Test POST."""
-
-        response = self.client.post(
-            reverse('genome:genome-list'),
-            {},
-            format='json'
-        )
+    response = client.put(reverse('genome:genome-detail', kwargs={'label': 'label'}), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    response = client.put(reverse('genome:chromosome-detail', kwargs={'label': 'label'}), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
+    response = client.put(reverse('genome:gene-detail', kwargs={'symbol__iexact': 'label'}), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
-    def test_get(self):
-        """Test GET."""
+    response = client.put(reverse('genome:transcript-detail', kwargs={'label': 'label'}), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
 
-        response = self.client.get(
-            reverse('genome:genome-list'),
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_200_OK
-
-        # Make sure data is correct
-        response_json = response.json()['results']
-        assert response_json[0]['id'] == 1
-        assert response_json[0]['label'] == 'label'
-        assert response_json[0]['description'] == ''
-        assert response_json[0]['description_url'] == 'https://www.google.com'
-        assert response_json[0]['active'] is True
-
-        # Make sure all expected keys are in the response
-        observed_keys = list(response_json[0].keys())
-        expected_keys = [
-            'id',
-            'label',
-            'description',
-            'description_url',
-            'active',
-            'created',
-            'modified'
-        ]
-        difference = set(observed_keys).difference(set(expected_keys))
-        assert len(difference) == 0
-
-    def test_put(self):
-        """Test PUT."""
-
-        response = self.client.put(
-            reverse('genome:genome-detail', kwargs={'label': 'label'}),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_patch(self):
-        """Test PATCH."""
-
-        response = self.client.patch(
-            reverse('genome:genome-detail', kwargs={'label': 'label'}),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_delete(self):
-        """Test DELETE."""
-        response = self.client.delete(
-            reverse('genome:genome-detail', kwargs={'label': 'label'}),
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-
-class TestGeneAPI(APITestCase):
-
-    def setUp(self):
-        """Define the test client and other test variables."""
-        self.client = APIClient()
-
-        # Create instance for GET, PUT, PATCH, DELETE Methods
-        fixtures.Gene()
-
-    def test_post(self):
-        """Test POST."""
-
-        response = self.client.post(
-            reverse('genome:gene-list'),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-
-    def test_get(self):
-        """Test GET."""
-
-        response = self.client.get(
-            reverse('genome:gene-list'),
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_200_OK
-
-        # Make sure data is correct
-        response_json = response.json()['results']
-        assert response_json[0]['id'] == 1
-        assert response_json[0]['hgnc_id'] == 1
-        assert response_json[0]['symbol'] == 'SYMBOL'
-        assert response_json[0]['name'] == 'name'
-        assert response_json[0]['status'] == 'approved'
-        assert response_json[0]['chromosome'] == 'LABEL'
-        assert response_json[0]['synonyms'] == ['label']
-        assert response_json[0]['active'] is True
-
-        # Make sure all expected keys are in the response
-        observed_keys = list(response_json[0].keys())
-        expected_keys = [
-            'id',
-            'hgnc_id',
-            'symbol',
-            'name',
-            'status',
-            'chromosome',
-            'synonyms',
-            'active',
-            'created',
-            'modified'
-        ]
-        difference = set(observed_keys).difference(set(expected_keys))
-        assert len(difference) == 0
-
-    def test_put(self):
-        """Test PUT."""
-
-        response = self.client.put(
-            reverse('genome:gene-detail', kwargs={'symbol__iexact': 'symbol'}),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_patch(self):
-        """Test PATCH."""
-
-        response = self.client.patch(
-            reverse('genome:gene-detail', kwargs={'symbol__iexact': 'symbol'}),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_delete(self):
-        """Test DELETE."""
-        response = self.client.delete(
-            reverse('genome:gene-detail', kwargs={'symbol__iexact': 'symbol'}),
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-
-class TestTranscriptAPI(APITestCase):
-
-    def setUp(self):
-        """Define the test client and other test variables."""
-        self.client = APIClient()
-
-        # Create instance for GET, PUT, PATCH, DELETE Methods
-        fixtures.Transcript()
-
-    def test_post(self):
-        """Test POST."""
-
-        response = self.client.post(
-            reverse('genome:transcript-list'),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-
-    def test_get(self):
-        """Test GET."""
-
-        response = self.client.get(
-            reverse('genome:transcript-list'),
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_200_OK
-
-        # Make sure data is correct
-        response_json = response.json()['results']
-        assert response_json[0]['id'] == 1
-        assert response_json[0]['label'] == 'label'
-        assert response_json[0]['gene'] == 'SYMBOL'
-        assert response_json[0]['strand'] == '+'
-        assert response_json[0]['transcription_start'] == 1
-        assert response_json[0]['transcription_end'] == 1
-        assert response_json[0]['cds_start'] == 1
-        assert response_json[0]['cds_end'] == 1
-        assert response_json[0]['active'] is True
-
-        # Make sure all expected keys are in the response
-        observed_keys = list(response_json[0].keys())
-        expected_keys = [
-            'id',
-            'label',
-            'gene',
-            'strand',
-            'chromosome',
-            'transcription_start',
-            'transcription_end',
-            'cds_start',
-            'cds_end',
-            'active',
-            'created',
-            'modified'
-        ]
-        difference = set(observed_keys).difference(set(expected_keys))
-        assert len(difference) == 0
-
-    def test_put(self):
-        """Test PUT."""
-
-        response = self.client.put(
-            reverse('genome:transcript-detail', kwargs={'label': 'label'}),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_patch(self):
-        """Test PATCH."""
-
-        response = self.client.patch(
-            reverse('genome:transcript-detail', kwargs={'label': 'label'}),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_delete(self):
-        """Test DELETE."""
-        response = self.client.delete(
-            reverse('genome:transcript-detail', kwargs={'label': 'label'}),
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-
-class TestExonAPI(APITestCase):
-
-    def setUp(self):
-        """Define the test client and other test variables."""
-        self.client = APIClient()
-
-        # Create instance for GET, PUT, PATCH, DELETE Methods
-        fixtures.Exon()
-
-    def test_post(self):
-        """Test POST."""
-
-        response = self.client.post(
-            reverse('genome:exon-list'),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-
-    def test_get(self):
-        """Test GET."""
-
-        response = self.client.get(
-            reverse('genome:exon-list'),
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_200_OK
-
-        # Make sure data is correct
-        response_json = response.json()['results']
-        assert response_json[0]['id'] == 1
-        assert response_json[0]['number'] == 1
-        assert response_json[0]['transcript'] == 'label'
-        assert response_json[0]['start'] == 1
-        assert response_json[0]['end'] == 1
-        assert response_json[0]['cds'] is True
-        assert response_json[0]['active'] is True
-
-        # Make sure all expected keys are in the response
-        observed_keys = list(response_json[0].keys())
-        expected_keys = [
-            'id',
-            'number',
-            'transcript',
-            'start',
-            'end',
-            'cds',
-            'active',
-            'created',
-            'modified'
-        ]
-        difference = set(observed_keys).difference(set(expected_keys))
-        assert len(difference) == 0
-
-    def test_put(self):
-        """Test PUT."""
-
-        response = self.client.put(
-            reverse('genome:exon-detail', kwargs={'pk': 1}),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_patch(self):
-        """Test PATCH."""
-
-        response = self.client.patch(
-            reverse('genome:exon-detail', kwargs={'pk': 1}),
-            {},
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-
-    def test_delete(self):
-        """Test DELETE."""
-        response = self.client.delete(
-            reverse('genome:exon-detail', kwargs={'pk': 1}),
-            format='json'
-        )
-
-        # Make sure to recieve correct HTTP code
-        assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    response = client.put(reverse('genome:exon-detail', kwargs={'pk': 1}), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    response = client.patch(reverse('genome:genome-detail', kwargs={'label': 'label'}), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    response = client.patch(reverse('genome:chromosome-detail', kwargs={'label': 'label'}), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    response = client.patch(reverse('genome:gene-detail', kwargs={'symbol__iexact': 'label'}), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    response = client.patch(reverse('genome:transcript-detail', kwargs={'label': 'label'}), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    response = client.patch(reverse('genome:exon-detail', kwargs={'pk': 1}), {})
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    response = client.delete(reverse('genome:genome-detail', kwargs={'label': 'label'}))
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    response = client.delete(reverse('genome:chromosome-detail', kwargs={'label': 'label'}))
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    response = client.delete(reverse('genome:gene-detail', kwargs={'symbol__iexact': 'symbol'}))
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    response = client.delete(reverse('genome:transcript-detail', kwargs={'label': 'label'}))
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+    response = client.delete(reverse('genome:exon-detail', kwargs={'pk': 1}))
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+
+
+@pytest.mark.django_db
+def test_get_genomes_list(Genome):
+    Genome(label='hg19')
+    client = setup_client()
+    response = client.get(reverse('genome:genome-list'), format='json')
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json().get('results', [])) == 1
+
+    observed_keys = list(response.json()['results'][0].keys())
+    expected_keys = [
+        'id',
+        'label',
+        'description',
+        'description_url',
+        'active',
+        'created',
+        'modified'
+    ]
+    difference = set(observed_keys).difference(set(expected_keys))
+    assert len(difference) == 0
+
+
+@pytest.mark.django_db
+def test_get_genomes_detail(Genome):
+    Genome(label='hg19')
+    client = setup_client()
+    response = client.get(reverse('genome:genome-detail', kwargs={'label': 'hg19'}), format='json')
+    assert response.status_code == status.HTTP_200_OK
+
+    observed_keys = list(response.json().keys())
+    expected_keys = [
+        'id',
+        'label',
+        'description',
+        'description_url',
+        'active',
+        'created',
+        'modified'
+    ]
+    difference = set(observed_keys).difference(set(expected_keys))
+    assert len(difference) == 0
+
+
+@pytest.mark.django_db
+def test_get_chromosomes_list(Chromosome):
+    Chromosome(label='chr1')
+    client = setup_client()
+    response = client.get(reverse('genome:chromosome-list'), format='json')
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json().get('results', [])) == 1
+
+    observed_keys = list(response.json()['results'][0].keys())
+    expected_keys = [
+        'id',
+        'genome',
+        'label',
+        'length',
+        'active',
+    ]
+    difference = set(observed_keys).difference(set(expected_keys))
+    assert len(difference) == 0
+
+
+@pytest.mark.django_db
+def test_get_chromosomes_detail(Chromosome):
+    Chromosome(label='chr1')
+    client = setup_client()
+    response = client.get(reverse('genome:chromosome-detail', kwargs={'label': 'CHR1'}), format='json')
+    assert response.status_code == status.HTTP_200_OK
+
+    observed_keys = list(response.json().keys())
+    expected_keys = [
+        'id',
+        'genome',
+        'label',
+        'length',
+        'active',
+    ]
+    difference = set(observed_keys).difference(set(expected_keys))
+    assert len(difference) == 0
+
+
+@pytest.mark.django_db
+def test_get_genes_list(Gene):
+    Gene(symbol='gene')
+    client = setup_client()
+    response = client.get(reverse('genome:gene-list'), format='json')
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json().get('results', [])) == 1
+
+    observed_keys = list(response.json()['results'][0].keys())
+    expected_keys = [
+        'id',
+        'hgnc_id',
+        'symbol',
+        'name',
+        'status',
+        'chromosome',
+        'synonyms',
+        'active',
+        'created',
+        'modified',
+    ]
+    difference = set(observed_keys).difference(set(expected_keys))
+    assert len(difference) == 0
+
+
+@pytest.mark.django_db
+def test_get_genes_detail(Gene):
+    Gene(symbol='gene')
+    client = setup_client()
+    response = client.get(reverse('genome:gene-detail', kwargs={'symbol__iexact': 'gene'}), format='json')
+    assert response.status_code == status.HTTP_200_OK
+
+    observed_keys = list(response.json().keys())
+    expected_keys = [
+        'id',
+        'hgnc_id',
+        'symbol',
+        'name',
+        'status',
+        'chromosome',
+        'synonyms',
+        'active',
+        'created',
+        'modified',
+    ]
+    difference = set(observed_keys).difference(set(expected_keys))
+    assert len(difference) == 0
+
+
+@pytest.mark.django_db
+def test_get_transcripts_list(Transcript):
+    Transcript(label='transcript')
+    client = setup_client()
+    response = client.get(reverse('genome:transcript-list'), format='json')
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json().get('results', [])) == 1
+
+    observed_keys = list(response.json()['results'][0].keys())
+    expected_keys = [
+        'id',
+        'label',
+        'gene',
+        'strand',
+        'chromosome',
+        'transcription_start',
+        'transcription_end',
+        'cds_start',
+        'cds_end',
+        'active',
+        'created',
+        'modified',
+    ]
+    difference = set(observed_keys).difference(set(expected_keys))
+    assert len(difference) == 0
+
+
+@pytest.mark.django_db
+def test_get_transcripts_detail(Transcript):
+    Transcript(label='transcript')
+    client = setup_client()
+    response = client.get(reverse('genome:transcript-detail', kwargs={'label': 'transcript'}), format='json')
+    assert response.status_code == status.HTTP_200_OK
+
+    observed_keys = list(response.json().keys())
+    expected_keys = [
+        'id',
+        'label',
+        'gene',
+        'strand',
+        'chromosome',
+        'transcription_start',
+        'transcription_end',
+        'cds_start',
+        'cds_end',
+        'active',
+        'created',
+        'modified',
+    ]
+    difference = set(observed_keys).difference(set(expected_keys))
+    assert len(difference) == 0
+
+
+@pytest.mark.django_db
+def test_get_exons_list(Exon):
+    Exon(pk=100)
+    client = setup_client()
+    response = client.get(reverse('genome:exon-list'), format='json')
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json().get('results', [])) == 1
+
+    observed_keys = list(response.json()['results'][0].keys())
+    expected_keys = [
+        'id',
+        'number',
+        'transcript',
+        'start',
+        'end',
+        'cds',
+        'active',
+        'created',
+        'modified',
+    ]
+    difference = set(observed_keys).difference(set(expected_keys))
+    assert len(difference) == 0
+
+
+@pytest.mark.django_db
+def test_get_exons_detail(Exon):
+    Exon(pk=100)
+    client = setup_client()
+    response = client.get(reverse('genome:exon-detail', kwargs={'pk': 100}), format='json')
+    assert response.status_code == status.HTTP_200_OK
+
+    observed_keys = list(response.json().keys())
+    expected_keys = [
+        'id',
+        'number',
+        'transcript',
+        'start',
+        'end',
+        'cds',
+        'active',
+        'created',
+        'modified',
+    ]
+    difference = set(observed_keys).difference(set(expected_keys))
+    assert len(difference) == 0

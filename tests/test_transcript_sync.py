@@ -20,14 +20,14 @@ from .fixtures import Gene
 
 @pytest.mark.django_db
 @mock.patch.object(utils, 'retrieve_compressed_data')
-def test_transcript_sync(retrieve_compressed_data_mock):
+def test_transcript_sync(retrieve_compressed_data_mock, Gene):
     retrieve_compressed_data_mock.return_value = [
         'na\ttranscript\tna\t+\t1\t2\t3\t4\t2\t1,2\t2,3\tna\tsymbol',
         'na\ttranscript2\tna\t-\t1\t2\t3\t4\t2\t1,2\t2,3\tna\tsymbol'
     ]
 
     # Create Gene object before calling transcript_sync
-    Gene()
+    Gene(symbol='symbol')
 
     call_command('transcript_sync', genome_build='hg18', sync_exons=True)
 
