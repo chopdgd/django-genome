@@ -1,111 +1,73 @@
 # -*- coding: utf-8 -*-
 from model_mommy import mommy
+import pytest
 
 
+@pytest.fixture
 def Genome():
-    return mommy.make(
-        'genome.Genome',
-        id=1,
-        label='label',
-        description_url='https://www.google.com',
-    )
+    def _func(**kwargs):
+        return mommy.make('genome.Genome', **kwargs)
+    return _func
 
 
+@pytest.fixture
 def Chromosome():
-    return mommy.make(
-        'genome.Chromosome',
-        id=1,
-        label='label',
-        genome=Genome(),
-        length=1,
-        active=True,
-    )
+    def _func(genome=None, **kwargs):
+        if not genome:
+            genome = mommy.make('genome.Genome', label='hg19')
+        return mommy.make('genome.Chromosome', genome=genome, **kwargs)
+    return _func
 
 
+@pytest.fixture
 def CytoBand():
-    return mommy.make(
-        'genome.CytoBand',
-        id=1,
-        label='label',
-        chromosome=Chromosome(),
-        start=1,
-        end=1,
-        stain='stain',
-        active=True,
-    )
+    def _func(chromosome=None, **kwargs):
+        if not chromosome:
+            chromosome = mommy.make('genome.Chromosome', label='1')
+        return mommy.make('genome.CytoBand', chromosome=chromosome, **kwargs)
+    return _func
 
 
+@pytest.fixture
 def Gene():
-    return mommy.make(
-        'genome.Gene',
-        id=1,
-        symbol='symbol',
-        name='name',
-        hgnc_id=1,
-        status=1,
-        active=True,
-        chromosome=Chromosome(),
-        previous_name='previous_name',
-        synonyms=[GeneSynonym()],
-        locus_type='locus_type',
-        locus_group='locus_group',
-        ensembl='ensembl',
-        refseq='refseq',
-        not_curated_ensembl='not_curated_ensembl,not_curated_ensembl',
-        not_curated_refseq='not_curated_refseq,not_curated_refseq',
-        not_curated_ucsc='not_curated_ucsc,not_curated_ucsc',
-        not_curated_omim='not_curated_omim,not_curated_omim',
-        not_curated_uniprot='',
-        not_curated_mouse_genome_database='not_curated_mouse_genome_database',
-        not_curated_rat_genome_database='not_curated_rat_genome_database',
-    )
+    def _func(chromosome=None, synonyms=None, **kwargs):
+        if not chromosome:
+            chromosome = mommy.make('genome.Chromosome', label='1')
+        if not synonyms:
+            synonyms = [mommy.make('genome.GeneSynonym', label='synonym')]
+        return mommy.make('genome.Gene', synonyms=synonyms, chromosome=chromosome, **kwargs)
+    return _func
 
 
+@pytest.fixture
 def GeneSynonym():
-    return mommy.make(
-        'genome.GeneSynonym',
-        id=1,
-        label='label',
-        active=True,
-    )
+    def _func(**kwargs):
+        return mommy.make('genome.GeneSynonym', **kwargs)
+    return _func
 
 
+@pytest.fixture
 def Transcript():
-    return mommy.make(
-        'genome.Transcript',
-        id=1,
-        label='label',
-        active=True,
-        gene=Gene(),
-        strand=1,
-        transcription_start=1,
-        transcription_end=1,
-        cds_start=1,
-        cds_end=1,
-        preferred_transcript=True,
-    )
+    def _func(gene=None, **kwargs):
+        if not gene:
+            gene = mommy.make('genome.Gene', symbol='GENE')
+        return mommy.make('genome.Transcript', gene=gene, **kwargs)
+    return _func
 
 
+@pytest.fixture
 def Exon():
-    return mommy.make(
-        'genome.Exon',
-        id=1,
-        number=1,
-        active=True,
-        transcript=Transcript(),
-        start=1,
-        end=1,
-        cds=True,
-    )
+    def _func(transcript=None, **kwargs):
+        if not transcript:
+            transcript = mommy.make('genome.Transcript', label='Transcript')
+        return mommy.make('genome.Exon', transcript=transcript, **kwargs)
+    return _func
 
 
+@pytest.fixture
 def GeneList():
-    return mommy.make(
-        'genome.GeneList',
-        id=1,
-        label='GeneList',
-        description='description',
-        version='version',
-        active=True,
-        genes=[Gene()],
-    )
+    def _func(genes=None, **kwargs):
+        if not genes:
+            genes = [mommy.make('genome.Gene', symbol='GENE')]
+        return mommy.make('genome.GeneList', genes=genes, **kwargs)
+    return _func
