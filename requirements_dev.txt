@@ -3,5 +3,5 @@ wheel==0.33.1
 
 # Docs requirements
 Sphinx==1.8.4
-sphinx-rtd-theme==0.4.2
+sphinx-rtd-theme==0.4.3
 sphinxcontrib-napoleon==0.7
