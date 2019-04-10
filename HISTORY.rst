@@ -143,3 +143,11 @@ History
 
 * Updated 3rd party libs
 * Updated tests to use py.test fixtures correctly
+
+0.7.8 (2019-04-10)
+++++++++++++++++++
+
+`Full Changelog https://github.com/chopdgd/django-genome/compare/v0.7.7...v0.7.8>`_
+
+* Updated 3rd party libs
+* Updated travis to use xenial distribution. Django 2.1 dropped support for SQLite < 3.8.3
