@@ -115,21 +115,6 @@ LOGGING = {
             },
         },
     'loggers': {
-        'genome.management.commands.chromosome_sync': {
-            'handlers': ['log_to_stdout'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'genome.management.commands.gene_sync': {
-            'handlers': ['log_to_stdout'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'genome.management.commands.transcript_sync': {
-            'handlers': ['log_to_stdout'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
         'genome.management.commands.genome_sync': {
             'handlers': ['log_to_stdout'],
             'level': 'DEBUG',

@@ -47,7 +47,7 @@ class GeneAdmin(admin.ModelAdmin):
     )
     raw_id_fields = ('chromosome', 'synonyms')
     search_fields = ('symbol', 'name', 'previous_name', 'synonyms__label')
-    list_filter = ('active', )
+    list_filter = ('active', 'status')
     save_as = True
 
 
@@ -69,7 +69,7 @@ class TranscriptAdmin(admin.ModelAdmin):
     )
     raw_id_fields = ('gene', )
     search_fields = ('label', 'gene__symbol', 'gene__synonyms__label')
-    list_filter = ('active', )
+    list_filter = ('active', 'strand')
     save_as = True
 
 
