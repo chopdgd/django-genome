@@ -1,6 +1,10 @@
 import logging
 
-from django.core.management import BaseCommand, call_command
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.management import BaseCommand
+
+from genome import app_settings, choices, models, utils
+from genomix.utils import retrieve_data
 
 
 logger = logging.getLogger(__name__)
@@ -11,7 +15,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            '--genome-build',
+            '--build',
             choices=['hg18', 'hg19', 'hg38'],
             default='hg19',
             help='Genome build to load',
@@ -19,13 +23,213 @@ class Command(BaseCommand):
         parser.add_argument(
             '--sync-exons',
             action='store_true',
-            help='Sync Exons',
+            help='Sync Exons. By default they are not synced.',
         )
 
     def handle(self, *args, **options):
-        logger.info('Syncing {0}'.format(options['genome_build']))
-        sync_exons = options.pop('sync_exons')
-        call_command('chromosome_sync', *args, **options)
-        call_command('gene_sync', *args, **options)
-        options.update({"sync_exons": sync_exons})
-        call_command('transcript_sync', *args, **options)
+        build = options['build']
+        resources = app_settings.RESOURCES.get(build, {})
+        description_url = resources.get('url', "")
+
+        logger.info('Syncing {0}...'.format(build))
+        genome, created = models.Genome.objects.update_or_create(
+            label=build,
+            defaults={'description_url': description_url}
+        )
+        self.sync_chromosomes(genome)
+        self.sync_cytobands(genome)
+        self.sync_genes(genome)
+        self.sync_transcripts(genome, sync_exons=options['sync_exons'])
+        logger.info('Syncing {0} complete!'.format(build))
+
+    def sync_chromosomes(self, genome):
+        logger.info('Syncing chromosomes...')
+        for row in self.run_ucsc_query(genome, self.ucsc_chromosome_sql()):
+            chromosome = utils.reformat_chromosome(row[0])
+            models.Chromosome.objects.update_or_create(
+                genome=genome,
+                label=chromosome,
+                defaults={'length': row[1]}
+            )
+
+    def sync_cytobands(self, genome):
+        logger.info('Syncing cytobands...')
+        for row in self.run_ucsc_query(genome, self.ucsc_cytoband_sql()):
+            chromosome = utils.reformat_chromosome(row[0])
+            models.CytoBand.objects.update_or_create(
+                label=row[3],
+                chromosome=models.Chromosome.objects.get(genome=genome, label=chromosome),
+                defaults={
+                    'start': row[1],
+                    'end': row[2],
+                    'stain': row[4],
+                }
+            )
+
+    def sync_genes(self, genome):
+        logger.info('Syncing HGNC genes...')
+        hgnc_data = retrieve_data(getattr(app_settings, 'HGNC_GENES'))
+        header = [text.upper() for text in hgnc_data.pop(0).strip().split('\t')]
+
+        for line in hgnc_data:
+            columns = line.split('\t')
+            symbol = columns[header.index('APPROVED SYMBOL')]
+            name = columns[header.index('APPROVED NAME')]
+            hgnc_id = columns[header.index('HGNC ID')]
+            status = columns[header.index('STATUS')]
+            chromosome = columns[header.index('CHROMOSOME')]
+            previous_name = columns[header.index('PREVIOUS NAME')]
+            locus_type = columns[header.index('LOCUS TYPE')]
+            locus_group = columns[header.index('LOCUS GROUP')]
+            ensembl = columns[header.index('ENSEMBL GENE ID')]
+            refseq = columns[header.index('REFSEQ IDS')]
+            not_curated_ensembl = columns[header.index('ENSEMBL ID(SUPPLIED BY ENSEMBL)')]
+            not_curated_refseq = columns[header.index('REFSEQ(SUPPLIED BY NCBI)')]
+            not_curated_ucsc = columns[header.index('UCSC ID(SUPPLIED BY UCSC)')]
+            not_curated_omim = columns[header.index('OMIM ID(SUPPLIED BY OMIM)')]
+            not_curated_uniprot = columns[header.index('UNIPROT ID(SUPPLIED BY UNIPROT)')]
+            not_curated_mouse_genome_database = columns[
+                header.index('MOUSE GENOME DATABASE ID(SUPPLIED BY MGI)')]
+            not_curated_rat_genome_database = columns[
+                header.index('RAT GENOME DATABASE ID(SUPPLIED BY RGD)')]
+
+            try:
+                chromosome = models.Chromosome.objects.get(
+                    genome=genome,
+                    label=utils.reformat_chromosome(chromosome),
+                )
+            except ObjectDoesNotExist:
+                chromosome = None
+
+            gene, created = models.Gene.objects.update_or_create(
+                symbol=symbol.upper(),
+                chromosome=chromosome,
+                defaults={
+                    'name': name,
+                    'hgnc_id': hgnc_id.strip().split(':')[1],
+                    'status': getattr(choices.HGNC_GENE_STATUS, status.lower().replace(' ', '_')),
+                    'previous_name': previous_name,
+                    'locus_type': locus_type,
+                    'locus_group': locus_group,
+                    'ensembl': ensembl,
+                    'refseq': refseq,
+                    'not_curated_ensembl': not_curated_ensembl,
+                    'not_curated_refseq': not_curated_refseq,
+                    'not_curated_ucsc': not_curated_ucsc,
+                    'not_curated_omim': not_curated_omim,
+                    'not_curated_uniprot': not_curated_uniprot,
+                    'not_curated_mouse_genome_database': not_curated_mouse_genome_database,
+                    'not_curated_rat_genome_database': not_curated_rat_genome_database,
+                }
+            )
+
+            synonyms = columns[header.index('SYNONYMS')].strip().split(',')
+            previous_symbols = columns[header.index('PREVIOUS SYMBOLS')].strip().split(',')
+
+            for synonym in synonyms + previous_symbols:
+                label = synonym.strip()
+                if label:
+                    synonym, created = models.GeneSynonym.objects.update_or_create(label=label.upper())
+                    gene.synonyms.add(synonym)
+
+            gene.save()
+
+    def sync_transcripts(self, genome, sync_exons=False):
+        message = 'Syncing RefSeq transcripts'
+        if sync_exons:
+            message += ' and exons'
+        logger.info('{0}...'.format(message))
+
+        for row in self.run_ucsc_query(genome, self.ucsc_refgene_sql()):
+            gene, created = models.Gene.objects.get_or_create(
+                symbol=row[0].upper(),
+                defaults={'status': getattr(choices.HGNC_GENE_STATUS, 'ucsc_gene')}
+            )
+            transcript, created = models.Transcript.objects.update_or_create(
+                label=row[1],
+                gene=gene,
+                defaults={
+                    'strand': getattr(choices.STRAND_TYPES, row[2]),
+                    'transcription_start': row[3],
+                    'transcription_end': row[4],
+                    'cds_start': row[5],
+                    'cds_end': row[6],
+                }
+            )
+
+            if sync_exons:
+                strand = row[2]
+                number_of_exons = row[7]
+                starts = [int(x) for x in row[8].strip().split(',') if x]
+                ends = [int(x) for x in row[9].strip().split(',') if x]
+
+                for index, exon in enumerate(starts):
+                    if strand == '+':  # NOTE: Positive strand exons count forward
+                        number = index + 1
+                    elif strand == '-':  # NOTE: Negative strand exons count reverse
+                        number = number_of_exons - index
+                    else:
+                        raise ValueError('strand: {0} is not supported!'.format(strand))
+
+                    models.Exon.objects.update_or_create(
+                        number=number,
+                        transcript=transcript,
+                        defaults={
+                            'start': starts[index],
+                            'end': ends[index],
+                        }
+                    )
+
+    def run_ucsc_query(self, genome, query):
+        build = genome.label
+        conn = self.ucsc_connection(build)
+        cursor = conn.cursor()
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        return rows
+
+    @staticmethod
+    def ucsc_connection(genome):
+        import MySQLdb
+        from MySQLdb.constants import FIELD_TYPE
+        conv = {FIELD_TYPE.LONG: int}
+        return MySQLdb.connect(
+            host='genome-mysql.cse.ucsc.edu',
+            user='genome',
+            passwd='',
+            db=genome,
+            conv=conv
+        )
+
+    @staticmethod
+    def ucsc_chromosome_sql():
+        sql = """SELECT chrom, size FROM chromInfo WHERE LENGTH(chrom) < 6;"""
+        logger.debug(sql)
+        return sql
+
+    @staticmethod
+    def ucsc_cytoband_sql():
+        sql = """SELECT chrom, chromStart, chromEnd, name, gieStain FROM cytoBand;"""
+        logger.debug(sql)
+        return sql
+
+    @staticmethod
+    def ucsc_refgene_sql():
+        sql = """SELECT
+            rg.name2,
+            CONCAT(rg.name,'.',gi.version) as 'name',
+            rg.strand,
+            rg.txStart,
+            rg.txEnd,
+            rg.cdsStart,
+            rg.cdsEnd,
+            rg.exonCount,
+            rg.exonStarts,
+            rg.exonEnds
+        FROM hg19.refGene rg
+        INNER JOIN hgFixed.gbCdnaInfo gi ON rg.name=gi.acc;
+        """
+        logger.debug(sql)
+        return sql
