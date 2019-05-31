@@ -23,12 +23,12 @@ lib64
 pip-log.txt
 
 # Unit test / coverage reports
+.cache
 .coverage
 .tox
 nosetests.xml
 htmlcov
 testing.db
-.cache
 .pytest_cache*
 
 # Translations
@@ -48,6 +48,3 @@ output/*/index.html
 
 # Sphinx
 docs/_build
-
-# Pyenv
-.python-version

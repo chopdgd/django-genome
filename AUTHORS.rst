@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Michael A. Gonzalez <genomics.geek.04.22@gmail.com>
+* Michael A. Gonzalez <GonzalezMA@email.chop.edu>
 
 Contributors
 ------------

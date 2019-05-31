@@ -1,4 +1,4 @@
-* Django Genome version:
+* django-genome version:
 * Django version:
 * Python version:
 * Operating System:

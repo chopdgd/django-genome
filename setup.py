@@ -56,7 +56,7 @@ setup(
     description="""Django app for syncing and storing human genome reference data""",
     long_description=readme + '\n\n' + history,
     author='Michael A. Gonzalez',
-    author_email='genomics.geek.04.22@gmail.com',
+    author_email='GonzalezMA@email.chop.edu',
     url='https://github.com/genomics-geek/django-genome',
     packages=[
         'genome',
@@ -68,10 +68,9 @@ setup(
     keywords='django-genome',
     classifiers=[
         'Development Status :: 4 - Beta',
-        'Framework :: Django',
-        'Framework :: Django :: 1.11',
         'Framework :: Django :: 2.0',
         'Framework :: Django :: 2.1',
+        'Framework :: Django :: 2.2',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',

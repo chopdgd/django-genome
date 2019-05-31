@@ -9,14 +9,14 @@ Tests for `django-genome` API.
 
 try:
     from django.urls import reverse
-except:
+except Exception:
     from django.core.urlresolvers import reverse
 
 import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from .fixtures import *
+from .fixtures import *  # NOQA
 
 
 @pytest.mark.django_db

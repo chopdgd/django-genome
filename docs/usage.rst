@@ -2,7 +2,7 @@
 Usage
 =====
 
-To use Django Genome in a project, add it to your `INSTALLED_APPS`:
+To use django-genome in a project, add it to your `INSTALLED_APPS`:
 
 .. code-block:: python
 
@@ -12,7 +12,7 @@ To use Django Genome in a project, add it to your `INSTALLED_APPS`:
         ...
     )
 
-Add Django Genome's URL patterns:
+Add django-genome's URL patterns:
 
 .. code-block:: python
 
