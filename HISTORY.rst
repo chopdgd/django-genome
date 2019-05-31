@@ -151,3 +151,12 @@ History
 
 * Updated 3rd party libs
 * Updated travis to use xenial distribution. Django 2.1 dropped support for SQLite < 3.8.3
+
+0.8.0 (2019-05-31)
+++++++++++++++++++
+
+`0.8.0 Changelog https://github.com/chopdgd/django-genome/compare/v0.7.8...v0.8.0>`_
+
+* Refactored sync to use UCSC MySQL database connection
+* Updated sync to incorporate transcript refseq versions
+* Updated package to use latest cookiecutter template
