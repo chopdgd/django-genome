@@ -52,8 +52,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Django Genome'
-copyright = u'2017, Michael A. Gonzalez'
+project = u'django-genome'
+copyright = u'2019, Michael A. Gonzalez'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -198,7 +198,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'django-genome.tex', u'Django Genome Documentation',
+  ('index', 'django-genome.tex', u'django-genome Documentation',
    u'Michael A. Gonzalez', 'manual'),
 ]
 
@@ -228,7 +228,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-genome', u'Django Genome Documentation',
+    ('index', 'django-genome', u'django-genome Documentation',
      [u'Michael A. Gonzalez'], 1)
 ]
 
@@ -242,7 +242,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'django-genome', u'Django Genome Documentation',
+  ('index', 'django-genome', u'django-genome Documentation',
    u'Michael A. Gonzalez', 'django-genome', 'One line description of project.',
    'Miscellaneous'),
 ]

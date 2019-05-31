@@ -11,7 +11,7 @@ DEBUG = True
 USE_TZ = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"
+SECRET_KEY = "gpz*kbklvx1=18(8r^x=o39u1$d6cewfb@237yv7c!+$e7aruo"
 
 DATABASES = {
     "default": {
@@ -28,8 +28,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.sites",
     "django.contrib.staticfiles",
-
     "django.contrib.admin",
+    "django.contrib.messages",
 
     "genome",
 
@@ -53,7 +53,6 @@ if django.VERSION >= (1, 10):
     MIDDLEWARE = DJANGO_MIDDLEWARE
 else:
     MIDDLEWARE_CLASSES = DJANGO_MIDDLEWARE
-
 
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -112,8 +111,8 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
-            },
         },
+    },
     'loggers': {
         'genome.management.commands.genome_sync': {
             'handlers': ['log_to_stdout'],

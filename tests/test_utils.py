@@ -9,7 +9,7 @@ Tests for `django-genome` utils module.
 
 import pytest
 
-from genome import app_settings, utils
+from genome import utils
 
 
 @pytest.mark.parametrize('chromosome, expected', [

@@ -8,7 +8,8 @@ test_django-genome
 Tests for `django-genome` models module.
 """
 
-from .fixtures import *
+import pytest
+from .fixtures import *  # NOQA
 
 
 @pytest.mark.django_db
