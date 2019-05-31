@@ -111,35 +111,35 @@ History
 0.7.2 (2018-08-13)
 ++++++++++++++++++
 
-`0.7.2 Changelog https://github.com/chopdgd/django-genome/compare/v0.7.1...v0.7.2>`_
+`0.7.2 Changelog <https://github.com/chopdgd/django-genome/compare/v0.7.1...v0.7.2>`_
 
 * Updated 3rd party requirements. Some requirements had changed so it was causing failures
 
 0.7.3 (2018-09-26)
 ++++++++++++++++++
 
-`0.7.3 Changelog https://github.com/chopdgd/django-genome/compare/v0.7.2...v0.7.3>`_
+`0.7.3 Changelog <https://github.com/chopdgd/django-genome/compare/v0.7.2...v0.7.3>`_
 
 * Updated transcript model to include preferred transcript boolean
 
 0.7.4 (2018-10-29)
 ++++++++++++++++++
 
-`0.7.4 Changelog https://github.com/chopdgd/django-genome/compare/v0.7.3...v0.7.4>`_
+`0.7.4 Changelog <https://github.com/chopdgd/django-genome/compare/v0.7.3...v0.7.4>`_
 
 * Updated 3rd party libs
 
 0.7.6 (2018-11-27)
 ++++++++++++++++++
 
-`0.7.6 Changelog https://github.com/chopdgd/django-genome/compare/v0.7.5...v0.7.6>`_
+`0.7.6 Changelog <https://github.com/chopdgd/django-genome/compare/v0.7.5...v0.7.6>`_
 
 * HGNC changed their headers - so gene sync was broken.  Made reading headers case insensitive
 
 0.7.7 (2019-02-08)
 ++++++++++++++++++
 
-`0.7.7 Changelog https://github.com/chopdgd/django-genome/compare/v0.7.6...v0.7.7>`_
+`0.7.7 Changelog <https://github.com/chopdgd/django-genome/compare/v0.7.6...v0.7.7>`_
 
 * Updated 3rd party libs
 * Updated tests to use py.test fixtures correctly
@@ -147,7 +147,7 @@ History
 0.7.8 (2019-04-10)
 ++++++++++++++++++
 
-`0.7.8 Changelog https://github.com/chopdgd/django-genome/compare/v0.7.7...v0.7.8>`_
+`0.7.8 Changelog <https://github.com/chopdgd/django-genome/compare/v0.7.7...v0.7.8>`_
 
 * Updated 3rd party libs
 * Updated travis to use xenial distribution. Django 2.1 dropped support for SQLite < 3.8.3
@@ -155,7 +155,7 @@ History
 0.8.0 (2019-05-31)
 ++++++++++++++++++
 
-`0.8.0 Changelog https://github.com/chopdgd/django-genome/compare/v0.7.8...v0.8.0>`_
+`0.8.0 Changelog <https://github.com/chopdgd/django-genome/compare/v0.7.8...v0.8.0>`_
 
 * Refactored sync to use UCSC MySQL database connection
 * Updated sync to incorporate transcript refseq versions
