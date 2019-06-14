@@ -1,14 +1,25 @@
 # -*- coding: utf-8
 def reformat_chromosome(chromosome):
-    if 'p' in chromosome:
-        new_chrom = chromosome.split('p')[0].upper()
-    elif 'q' in chromosome:
-        new_chrom = chromosome.split('q')[0].upper()
-    else:
-        new_chrom = chromosome.replace('chr', '').upper()
+    chromosome = chromosome.replace('chr', '').replace('unplaced', '').upper().strip()
+    accepted = list(map(str, range(1, 23))) + ['X', 'Y', 'M', 'MT']
 
-    if new_chrom in list(map(str, range(1, 23))) or new_chrom in ['X', 'Y', 'M', 'MT']:
-        return new_chrom
+    if chromosome not in accepted:
+        if all(x in chromosome for x in ['P']):
+            return chromosome.split('P')[0]
+        elif all(x in chromosome for x in ['Q']):
+            return chromosome.split('Q')[0]
+        else:
+            new_chromosome = chromosome.lower() \
+                .replace('alternate reference locus', '') \
+                .replace('mitochondria', 'M') \
+                .replace('not on reference assembly', '') \
+                .upper() \
+                .strip()
+
+            if new_chromosome in accepted:
+                return new_chromosome
+    else:
+        return chromosome
 
 
 def chromosome_number(chromosome):
