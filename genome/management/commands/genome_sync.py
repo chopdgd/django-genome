@@ -1,10 +1,12 @@
 import logging
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.management import BaseCommand
+from django.db import IntegrityError
 
 from genome import app_settings, choices, models, utils
 from genomix.utils import retrieve_data
+
+from tqdm import tqdm
 
 
 logger = logging.getLogger(__name__)
@@ -37,41 +39,63 @@ class Command(BaseCommand):
             defaults={'description_url': description_url}
         )
         self.sync_chromosomes(genome)
-        self.sync_cytobands(genome)
-        self.sync_genes(genome)
-        self.sync_transcripts(genome, sync_exons=options['sync_exons'])
+
+        chromosomes = self.get_chromosomes(genome)
+        self.sync_cytobands(genome, chromosomes)
+        self.sync_genes(genome, chromosomes)
+        self.sync_transcripts(genome, chromosomes, sync_exons=options['sync_exons'])
         logger.info('Syncing {0} complete!'.format(build))
+
+    @staticmethod
+    def get_chromosomes(genome):
+        chromosomes = {}
+        for item in models.Chromosome.objects.filter(genome=genome):
+            chromosomes[item.label] = item
+        return chromosomes
+
+    @staticmethod
+    def get_chromosome(genome, chromosomes, value):
+        if value:
+            label = utils.reformat_chromosome(value)
+            try:
+                return chromosomes[label]
+            except KeyError:
+                logger.warning('Chromosome: {0} does not exist!'.format(value))
 
     def sync_chromosomes(self, genome):
         logger.info('Syncing chromosomes...')
-        for row in self.run_ucsc_query(genome, self.ucsc_chromosome_sql()):
+        for row in tqdm(self.run_ucsc_query(genome, self.ucsc_chromosome_sql())):
             chromosome = utils.reformat_chromosome(row[0])
             models.Chromosome.objects.update_or_create(
                 genome=genome,
                 label=chromosome,
                 defaults={'length': row[1]}
             )
+        logger.info('Syncing chromosomes complete!')
 
-    def sync_cytobands(self, genome):
+    def sync_cytobands(self, genome, chromosomes):
         logger.info('Syncing cytobands...')
-        for row in self.run_ucsc_query(genome, self.ucsc_cytoband_sql()):
-            chromosome = utils.reformat_chromosome(row[0])
+        for row in tqdm(self.run_ucsc_query(genome, self.ucsc_cytoband_sql())):
+            chromosome = self.get_chromosome(genome, chromosomes, row[0])
             models.CytoBand.objects.update_or_create(
                 label=row[3],
-                chromosome=models.Chromosome.objects.get(genome=genome, label=chromosome),
+                chromosome=chromosome,
                 defaults={
                     'start': row[1],
                     'end': row[2],
                     'stain': row[4],
                 }
             )
+        logger.info('Syncing cytobands complete!')
 
-    def sync_genes(self, genome):
+    def sync_genes(self, genome, chromosomes):
         logger.info('Syncing HGNC genes...')
+        logger.info('Downloading from HGNC...')
         hgnc_data = retrieve_data(getattr(app_settings, 'HGNC_GENES'))
+        logger.info('Downloading complete!')
         header = [text.upper() for text in hgnc_data.pop(0).strip().split('\t')]
 
-        for line in hgnc_data:
+        for line in tqdm(hgnc_data):
             columns = line.split('\t')
             symbol = columns[header.index('APPROVED SYMBOL')]
             name = columns[header.index('APPROVED NAME')]
@@ -93,14 +117,7 @@ class Command(BaseCommand):
             not_curated_rat_genome_database = columns[
                 header.index('RAT GENOME DATABASE ID(SUPPLIED BY RGD)')]
 
-            try:
-                chromosome = models.Chromosome.objects.get(
-                    genome=genome,
-                    label=utils.reformat_chromosome(chromosome),
-                )
-            except ObjectDoesNotExist:
-                chromosome = None
-
+            chromosome = self.get_chromosome(genome, chromosomes, chromosome)
             gene, created = models.Gene.objects.update_or_create(
                 symbol=symbol.upper(),
                 chromosome=chromosome,
@@ -133,29 +150,40 @@ class Command(BaseCommand):
                     gene.synonyms.add(synonym)
 
             gene.save()
+        logger.info('Syncing HGNC genes complete!')
 
-    def sync_transcripts(self, genome, sync_exons=False):
+    def sync_transcripts(self, genome, chromosomes, sync_exons=False):
         message = 'Syncing RefSeq transcripts'
         if sync_exons:
             message += ' and exons'
         logger.info('{0}...'.format(message))
 
-        for row in self.run_ucsc_query(genome, self.ucsc_refgene_sql()):
+        for row in tqdm(self.run_ucsc_query(genome, self.ucsc_refgene_sql())):
+            chromosome = self.get_chromosome(genome, chromosomes, row[10])
             gene, created = models.Gene.objects.get_or_create(
+                chromosome__genome=genome,
                 symbol=row[0].upper(),
-                defaults={'status': getattr(choices.HGNC_GENE_STATUS, 'ucsc_gene')}
-            )
-            transcript, created = models.Transcript.objects.update_or_create(
-                label=row[1],
-                gene=gene,
                 defaults={
-                    'strand': getattr(choices.STRAND_TYPES, row[2]),
-                    'transcription_start': row[3],
-                    'transcription_end': row[4],
-                    'cds_start': row[5],
-                    'cds_end': row[6],
+                    'status': getattr(choices.HGNC_GENE_STATUS, 'ucsc_gene'),
+                    'chromosome': chromosome,
                 }
             )
+
+            try:
+                transcript, created = models.Transcript.objects.update_or_create(
+                    label=row[1],
+                    gene=gene,
+                    defaults={
+                        'strand': getattr(choices.STRAND_TYPES, row[2]),
+                        'transcription_start': row[3],
+                        'transcription_end': row[4],
+                        'cds_start': row[5],
+                        'cds_end': row[6],
+                    }
+                )
+            except IntegrityError:
+                logger.warning('Transcript: {0} was skipped!'.format(row[1]))
+                continue
 
             if sync_exons:
                 strand = row[2]
@@ -179,8 +207,10 @@ class Command(BaseCommand):
                             'end': ends[index],
                         }
                     )
+        logger.info('{0} complete!'.format(message))
 
     def run_ucsc_query(self, genome, query):
+        logger.info('Querying UCSC...')
         build = genome.label
         conn = self.ucsc_connection(build)
         cursor = conn.cursor()
@@ -188,6 +218,7 @@ class Command(BaseCommand):
         rows = cursor.fetchall()
         cursor.close()
         conn.close()
+        logger.info('Querying UCSC complete!')
         return rows
 
     @staticmethod
@@ -227,7 +258,8 @@ class Command(BaseCommand):
             rg.cdsEnd,
             rg.exonCount,
             rg.exonStarts,
-            rg.exonEnds
+            rg.exonEnds,
+            rg.chrom
         FROM hg19.refGene rg
         INNER JOIN hgFixed.gbCdnaInfo gi ON rg.name=gi.acc;
         """

@@ -18,6 +18,12 @@ from genome import utils
     ('1p10.1', '1'),
     ('1q10.1', '1'),
     ('dasfa', None),
+    ('12 alternate reference locus', '12'),
+    ('mitochondria', 'M'),
+    ('13 not on reference assembly', '13'),
+    ('15 unplaced', '15'),
+    ('4q27', '4'),
+    ('5q31', '5'),
 ])
 def test_reformat_chromosome(chromosome, expected):
     assert utils.reformat_chromosome(chromosome) == expected
