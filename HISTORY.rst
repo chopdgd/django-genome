@@ -160,3 +160,11 @@ History
 * Refactored sync to use UCSC MySQL database connection
 * Updated sync to incorporate transcript refseq versions
 * Updated package to use latest cookiecutter template
+
+0.8.1 (2019-06-14)
+++++++++++++++++++
+
+`0.8.1 Changelog <https://github.com/chopdgd/django-genome/compare/v0.8.0...v0.8.1>`_
+
+* Gene entries created from RefSeq where not setting the chromosome attribute
+* Added better logging functionality
