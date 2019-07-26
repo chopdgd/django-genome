@@ -168,3 +168,10 @@ History
 
 * Gene entries created from RefSeq where not setting the chromosome attribute
 * Added better logging functionality
+
+0.8.2 (2019-07-26)
+++++++++++++++++++
+
+`0.8.2 Changelog <https://github.com/chopdgd/django-genome/compare/v0.8.1...v0.8.2>`_
+
+* Updated 3rd party libs
