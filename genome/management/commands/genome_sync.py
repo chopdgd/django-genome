@@ -2,7 +2,6 @@ import logging
 
 from django.core.management import BaseCommand
 from django.db import IntegrityError
-from django.db.models import Q
 
 from genome import app_settings, choices, models, utils
 from genomix.utils import retrieve_data
