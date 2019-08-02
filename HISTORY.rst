@@ -175,3 +175,10 @@ History
 `0.8.2 Changelog <https://github.com/chopdgd/django-genome/compare/v0.8.1...v0.8.2>`_
 
 * Updated 3rd party libs
+
+0.9.0 (2019-08-02)
+++++++++++++++++++
+
+`0.9.0 Changelog <https://github.com/chopdgd/django-genome/compare/v0.8.2...v0.9.0>`_
+
+* Updated Gene data model and sync to include date approved/modified.
