@@ -2,6 +2,7 @@ import logging
 
 from django.core.management import BaseCommand
 from django.db import IntegrityError
+from django.db.models import Q
 
 from genome import app_settings, choices, models, utils
 from genomix.utils import retrieve_data
@@ -107,6 +108,8 @@ class Command(BaseCommand):
             locus_group = columns[header.index('LOCUS GROUP')]
             ensembl = columns[header.index('ENSEMBL GENE ID')]
             refseq = columns[header.index('REFSEQ IDS')]
+            date_approved = columns[header.index('DATE APPROVED')]
+            date_modified = columns[header.index('DATE MODIFIED')]
             not_curated_ensembl = columns[header.index('ENSEMBL ID(SUPPLIED BY ENSEMBL)')]
             not_curated_refseq = columns[header.index('REFSEQ(SUPPLIED BY NCBI)')]
             not_curated_ucsc = columns[header.index('UCSC ID(SUPPLIED BY UCSC)')]
@@ -130,6 +133,8 @@ class Command(BaseCommand):
                     'locus_group': locus_group,
                     'ensembl': ensembl,
                     'refseq': refseq,
+                    'date_approved': date_approved,
+                    'date_modified': date_modified,
                     'not_curated_ensembl': not_curated_ensembl,
                     'not_curated_refseq': not_curated_refseq,
                     'not_curated_ucsc': not_curated_ucsc,
@@ -162,11 +167,9 @@ class Command(BaseCommand):
             chromosome = self.get_chromosome(genome, chromosomes, row[10])
             gene, created = models.Gene.objects.get_or_create(
                 chromosome__genome=genome,
+                chromosome=chromosome,
                 symbol=row[0].upper(),
-                defaults={
-                    'status': getattr(choices.HGNC_GENE_STATUS, 'ucsc_gene'),
-                    'chromosome': chromosome,
-                }
+                defaults={'status': getattr(choices.HGNC_GENE_STATUS, 'ucsc_gene')}
             )
 
             try:

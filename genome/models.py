@@ -110,6 +110,8 @@ class Gene(TimeStampedModel):
 
     ensembl = models.TextField(blank=True)
     refseq = models.TextField(blank=True)
+    date_approved = models.TextField(blank=True)
+    date_modified = models.TextField(blank=True)
 
     # Not curated by HGNC staff.  These are provided by exeternal resources
     not_curated_ensembl = models.TextField(
