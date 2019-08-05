@@ -182,3 +182,10 @@ History
 `0.9.0 Changelog <https://github.com/chopdgd/django-genome/compare/v0.8.2...v0.9.0>`_
 
 * Updated Gene data model and sync to include date approved/modified.
+
+0.9.1 (2019-08-05)
+++++++++++++++++++
+
+`0.9.1 Changelog <https://github.com/chopdgd/django-genome/compare/v0.9.0...v0.9.1>`_
+
+* Fixed issue with bundle not being published correctly
