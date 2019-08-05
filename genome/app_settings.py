@@ -23,4 +23,4 @@ RESOURCES = {
     }
 }
 
-HGNC_GENES = 'http://tinyurl.com/mqot6vl'
+HGNC_GENES = 'https://tinyurl.com/y6zhrf33'
