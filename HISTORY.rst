@@ -189,3 +189,10 @@ History
 `0.9.1 Changelog <https://github.com/chopdgd/django-genome/compare/v0.9.0...v0.9.1>`_
 
 * Fixed issue with bundle not being published correctly
+
+0.9.2 (2019-08-09)
+++++++++++++++++++
+
+`0.9.2 Changelog <https://github.com/chopdgd/django-genome/compare/v0.9.1...v0.8.2>`_
+
+* Updated 3rd party libs
