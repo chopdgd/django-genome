@@ -1,13 +1,13 @@
 coverage==4.5.4
 mock==3.0.5
 flake8==3.7.8
-tox==3.13.2
+tox==3.14.0
 codecov==2.0.15
 
 
 # Additional test requirements go here
 
-pytest==5.1.0
+pytest==5.1.2
 pytest-cov==2.7.1
 pytest-django==3.5.1
 pytest-sugar==0.9.2
