@@ -1,6 +1,6 @@
 # -*- coding: utf-8
 def reformat_chromosome(chromosome):
-    chromosome = chromosome.replace('chr', '').replace('unplaced', '').upper().strip()
+    chromosome = chromosome.replace('chr', '').replace('unplaced', '').upper().strip().split('_')[0]
     accepted = list(map(str, range(1, 23))) + ['X', 'Y', 'M', 'MT']
 
     if chromosome not in accepted:

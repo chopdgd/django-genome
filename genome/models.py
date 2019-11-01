@@ -85,7 +85,7 @@ class Gene(TimeStampedModel):
     Source: http://www.genenames.org/cgi-bin/download
     Custom Query: http://tinyurl.com/mqot6vl
     """
-    symbol = models.CharField(max_length=255, db_index=True)
+    symbol = models.CharField(max_length=255, unique=True, db_index=True)
     name = models.TextField(blank=True)
     hgnc_id = models.PositiveIntegerField(null=True, blank=True)
     status = models.PositiveSmallIntegerField(choices=choices.HGNC_GENE_STATUS)
@@ -148,7 +148,6 @@ class Gene(TimeStampedModel):
     class Meta:
         verbose_name = _('Gene')
         verbose_name_plural = _('Genes')
-        unique_together = ('chromosome', 'symbol')
 
     def __str__(self):
         return self.symbol
