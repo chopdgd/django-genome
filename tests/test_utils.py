@@ -24,6 +24,7 @@ from genome import utils
     ('15 unplaced', '15'),
     ('4q27', '4'),
     ('5q31', '5'),
+    ('chr7_hap3_adf', '7'),
 ])
 def test_reformat_chromosome(chromosome, expected):
     assert utils.reformat_chromosome(chromosome) == expected

@@ -120,29 +120,33 @@ class Command(BaseCommand):
                 header.index('RAT GENOME DATABASE ID(SUPPLIED BY RGD)')]
 
             chromosome = self.get_chromosome(genome, chromosomes, chromosome)
-            gene, created = models.Gene.objects.update_or_create(
+            defaults = {
+                'chromosome': chromosome,
+                'name': name,
+                'hgnc_id': hgnc_id.strip().split(':')[1],
+                'status': getattr(choices.HGNC_GENE_STATUS, status.lower().replace(' ', '_')),
+                'previous_name': previous_name,
+                'locus_type': locus_type,
+                'locus_group': locus_group,
+                'ensembl': ensembl,
+                'refseq': refseq,
+                'date_approved': date_approved,
+                'date_modified': date_modified,
+                'not_curated_ensembl': not_curated_ensembl,
+                'not_curated_refseq': not_curated_refseq,
+                'not_curated_ucsc': not_curated_ucsc,
+                'not_curated_omim': not_curated_omim,
+                'not_curated_uniprot': not_curated_uniprot,
+                'not_curated_mouse_genome_database': not_curated_mouse_genome_database,
+                'not_curated_rat_genome_database': not_curated_rat_genome_database,
+            }
+            gene, created = models.Gene.objects.get_or_create(
                 symbol=symbol.upper(),
-                chromosome=chromosome,
-                defaults={
-                    'name': name,
-                    'hgnc_id': hgnc_id.strip().split(':')[1],
-                    'status': getattr(choices.HGNC_GENE_STATUS, status.lower().replace(' ', '_')),
-                    'previous_name': previous_name,
-                    'locus_type': locus_type,
-                    'locus_group': locus_group,
-                    'ensembl': ensembl,
-                    'refseq': refseq,
-                    'date_approved': date_approved,
-                    'date_modified': date_modified,
-                    'not_curated_ensembl': not_curated_ensembl,
-                    'not_curated_refseq': not_curated_refseq,
-                    'not_curated_ucsc': not_curated_ucsc,
-                    'not_curated_omim': not_curated_omim,
-                    'not_curated_uniprot': not_curated_uniprot,
-                    'not_curated_mouse_genome_database': not_curated_mouse_genome_database,
-                    'not_curated_rat_genome_database': not_curated_rat_genome_database,
-                }
+                defaults=defaults,
             )
+            if not created and status.lower() == 'approved':
+                logger.warning(f'Gene: {symbol.upper()} has duplicate. Updating to approved symbol')
+                models.Gene.objects.filter(symbol=symbol.upper()).update(**defaults)
 
             synonyms = columns[header.index('SYNONYMS')].strip().split(',')
             previous_symbols = columns[header.index('PREVIOUS SYMBOLS')].strip().split(',')
@@ -164,11 +168,14 @@ class Command(BaseCommand):
 
         for row in tqdm(self.run_ucsc_query(genome, self.ucsc_refgene_sql())):
             chromosome = self.get_chromosome(genome, chromosomes, row[10])
+            if not chromosome:
+                logger.warning(f'No chromosome: {row}')
             gene, created = models.Gene.objects.get_or_create(
-                chromosome__genome=genome,
-                chromosome=chromosome,
                 symbol=row[0].upper(),
-                defaults={'status': getattr(choices.HGNC_GENE_STATUS, 'ucsc_gene')}
+                defaults={
+                    'chromosome': chromosome,
+                    'status': getattr(choices.HGNC_GENE_STATUS, 'ucsc_gene')
+                }
             )
 
             try:
