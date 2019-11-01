@@ -203,3 +203,11 @@ History
 `0.9.3 Changelog <https://github.com/chopdgd/django-genome/compare/v0.9.2...v0.9.3>`_
 
 * Updated 3rd party libs
+
+1.0.0 (2019-11-01)
+++++++++++++++++++
+
+`1.0.0 Changelog <https://github.com/chopdgd/django-genome/compare/v0.9.3...v1.0.0>`_
+
+* Updated Gene model to make sure it is unique on symbol
+* First, production release
