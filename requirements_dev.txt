@@ -3,10 +3,10 @@
 
 bumpversion==0.5.3
 wheel==0.33.6
-twine==1.15.0
+twine==2.0.0
 
 # Docs requirements
-Sphinx==2.2.0
+Sphinx==2.2.1
 sphinx-rtd-theme==0.4.3
 sphinxcontrib-napoleon==0.7
 
