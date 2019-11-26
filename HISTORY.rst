@@ -211,3 +211,10 @@ History
 
 * Updated Gene model to make sure it is unique on symbol
 * First, production release
+
+1.1.0 (2019-11-26)
+++++++++++++++++++
+
+`1.1.0 Changelog <https://github.com/chopdgd/django-genome/compare/v1.0.0...v1.0.``>`_
+
+* Updated dependencies
