@@ -7,7 +7,7 @@ codecov==2.0.15
 
 # Additional test requirements go here
 
-pytest==5.2.2
+pytest==5.3.5
 pytest-cov==2.8.1
 pytest-django==3.6.0
 pytest-sugar==0.9.2
