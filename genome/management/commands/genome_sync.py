@@ -198,8 +198,8 @@ class Command(BaseCommand):
             if sync_exons:
                 strand = row[2]
                 number_of_exons = row[7]
-                starts = [int(x) for x in row[8].strip().split(',') if x]
-                ends = [int(x) for x in row[9].strip().split(',') if x]
+                starts = [int(x) for x in row[8].decode('utf-8').strip().split(',') if x]
+                ends = [int(x) for x in row[9].decode('utf-8').strip().split(',') if x]
 
                 for index, exon in enumerate(starts):
                     if strand == '+':  # NOTE: Positive strand exons count forward
