@@ -148,13 +148,14 @@ class Command(BaseCommand):
                 logger.warning(f'Gene: {symbol.upper()} has duplicate. Updating to approved symbol')
                 models.Gene.objects.filter(symbol=symbol.upper()).update(**defaults)
 
-            synonyms = columns[header.index('SYNONYMS')].strip().split(',')
+            synonyms = columns[header.index('ALIAS SYMBOLS')].strip().split(',')
             previous_symbols = columns[header.index('PREVIOUS SYMBOLS')].strip().split(',')
 
             for synonym in synonyms + previous_symbols:
                 label = synonym.strip()
                 if label:
-                    synonym, created = models.GeneSynonym.objects.update_or_create(label=label.upper())
+                    synonym, created = models.GeneSynonym.objects.update_or_create(
+                        label=label.upper())
                     gene.synonyms.add(synonym)
 
             gene.save()
@@ -197,8 +198,8 @@ class Command(BaseCommand):
             if sync_exons:
                 strand = row[2]
                 number_of_exons = row[7]
-                starts = [int(x) for x in row[8].strip().split(',') if x]
-                ends = [int(x) for x in row[9].strip().split(',') if x]
+                starts = [int(x) for x in row[8].decode('utf-8').strip().split(',') if x]
+                ends = [int(x) for x in row[9].decode('utf-8').strip().split(',') if x]
 
                 for index, exon in enumerate(starts):
                     if strand == '+':  # NOTE: Positive strand exons count forward
