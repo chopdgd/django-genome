@@ -215,6 +215,14 @@ History
 1.1.0 (2019-11-26)
 ++++++++++++++++++
 
-`1.1.0 Changelog <https://github.com/chopdgd/django-genome/compare/v1.0.0...v1.0.``>`_
+`1.1.0 Changelog <https://github.com/chopdgd/django-genome/compare/v1.0.0...v1.1.0>`_
 
 * Updated dependencies
+
+1.1.1 (2020-03-12)
+++++++++++++++++++
+
+`1.1.1 Changelog <https://github.com/chopdgd/django-genome/compare/v1.1.0...v1.1.1>`_
+
+* #149 - Updated the genome sync to deal with new headers
+* #144 - preferred transcript sync will now use version numbers
