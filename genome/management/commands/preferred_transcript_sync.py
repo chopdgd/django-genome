@@ -31,8 +31,7 @@ class Command(BaseCommand):
         preferred_transcript_mapping = open(options['preferred_transcript_mapping'], 'r')
 
         for mapping in preferred_transcript_mapping:
-            columns = mapping.strip().split('.')
-            preferred_transcript = columns[0]
+            preferred_transcript = mapping.strip()
 
             Transcript.objects.filter(
                 Q(gene__chromosome__genome=genome) & Q(label__iexact=preferred_transcript)
