@@ -1,13 +1,13 @@
 -r requirements.txt
 -r requirements_test.txt
 
-bumpversion==0.5.3
-wheel==0.33.6
-twine==2.0.0
+bumpversion==0.6.0
+wheel==0.35.1
+twine==3.2.0
 
 # Docs requirements
-Sphinx==2.2.1
-sphinx-rtd-theme==0.4.3
+Sphinx==3.2.1
+sphinx-rtd-theme==0.5.0
 sphinxcontrib-napoleon==0.7
 
-autopep8==1.4.4
+autopep8==1.5.4
