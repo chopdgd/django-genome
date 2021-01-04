@@ -8,4 +8,4 @@ django-genomix==1.1.0
 django-model-utils==4.1.1
 
 mysqlclient==2.0.3
-tqdm==4.37.0
+tqdm==4.55.1
