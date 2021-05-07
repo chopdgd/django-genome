@@ -9,3 +9,4 @@ django-model-utils==3.2.0
 
 mysqlclient==1.4.4
 tqdm==4.37.0
+django>=2.2.22 # not directly required, pinned by Snyk to avoid a vulnerability
