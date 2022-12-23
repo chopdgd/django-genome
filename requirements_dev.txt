@@ -2,7 +2,7 @@
 -r requirements_test.txt
 
 bumpversion==0.5.3
-wheel==0.33.6
+wheel==0.38.0
 twine==2.0.0
 
 # Docs requirements
@@ -11,3 +11,4 @@ sphinx-rtd-theme==0.4.3
 sphinxcontrib-napoleon==0.7
 
 autopep8==1.4.4
+setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
