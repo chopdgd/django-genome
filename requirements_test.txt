@@ -1,6 +1,6 @@
 coverage==7.1.0
 mock==5.0.1
-flake8==3.7.9
+flake8==6.0.0
 tox==3.14.0
 codecov==2.0.15
 
