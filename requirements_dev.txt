@@ -6,7 +6,7 @@ wheel==0.40.0
 twine==4.0.2
 
 # Docs requirements
-Sphinx==2.2.1
+Sphinx==7.0.0
 sphinx-rtd-theme==0.4.3
 sphinxcontrib-napoleon==0.7
 
