@@ -7,7 +7,7 @@ twine==4.0.2
 
 # Docs requirements
 Sphinx==7.1.1
-sphinx-rtd-theme==0.4.3
+sphinx-rtd-theme==1.2.2
 sphinxcontrib-napoleon==0.7
 
 autopep8==1.4.4
