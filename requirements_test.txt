@@ -2,7 +2,7 @@ coverage==7.3.2
 mock==5.1.0
 flake8==6.1.0
 tox==4.11.3
-codecov==2.0.15
+codecov==2.1.13
 
 
 # Additional test requirements go here
