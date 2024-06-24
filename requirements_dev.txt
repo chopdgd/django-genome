@@ -1,7 +1,7 @@
 -r requirements.txt
 -r requirements_test.txt
 
-bumpversion==0.5.3
+bumpversion==0.6.0
 wheel==0.33.6
 twine==2.0.0
 
